@@ -1,5 +1,5 @@
 // ==========================================================================
-// TV-HUB // MAIN APPLICATION CONTROLLER (iOS 18 EDITION)
+// TV-HUB // MAIN APPLICATION CONTROLLER (RETRO DESKTOP EDITION)
 // ==========================================================================
 
 const App = {
@@ -16,7 +16,6 @@ const App = {
     this.initFileSender();
     this.initAppManager();
     this.initShortcuts();
-    this.initThemeSettings();
     this.initCommandPalette();
     this.initActivityLog();
     this.bindTextAndClipboard();
@@ -29,10 +28,9 @@ const App = {
   },
 
   // ---------------------------------------------------------------------------
-  // Navigation & Shell
+  // Navigation & Window Switching
   // ---------------------------------------------------------------------------
   initNavigation() {
-    // Desktop Sidebar & Topbar Nav Items
     document.querySelectorAll('[data-tab]').forEach(el => {
       el.addEventListener('click', (e) => {
         e.preventDefault();
@@ -40,26 +38,13 @@ const App = {
         this.switchTab(tab);
       });
     });
-
-    // Mobile Sidebar Toggle
-    const toggleBtn = document.getElementById('btn-toggle-sidebar');
-    const sidebar = document.querySelector('.app-sidebar');
-    if (toggleBtn && sidebar) {
-      toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('mobile-open');
-      });
-      // Close on outside click
-      document.querySelector('.main-viewport').addEventListener('click', () => {
-        sidebar.classList.remove('mobile-open');
-      });
-    }
   },
 
   switchTab(tabId) {
     this.currentTab = tabId;
 
-    // Update Desktop Nav Active States
-    document.querySelectorAll('.nav-item').forEach(el => {
+    // Update Taskbar Window Tabs
+    document.querySelectorAll('.taskbar-item, [data-tab]').forEach(el => {
       if (el.getAttribute('data-tab') === tabId) {
         el.classList.add('active');
       } else {
@@ -67,31 +52,7 @@ const App = {
       }
     });
 
-    // Update Mobile Tab Bar States
-    document.querySelectorAll('.mobile-tab-item').forEach(el => {
-      if (el.getAttribute('data-tab') === tabId) {
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-      }
-    });
-
-    // Update Main Title in Topbar
-    const titles = {
-      overview: 'Overview',
-      remote: 'Remote Control',
-      cast: 'Screen Mirror & Trackpad',
-      text: 'Text & Clipboard',
-      files: 'File Sender',
-      apps: 'Apps & TV Bro',
-      shortcuts: 'Website Shortcuts',
-      discovery: 'Network Scanner',
-      settings: 'Appearance & Settings'
-    };
-    const titleEl = document.getElementById('topbar-page-title');
-    if (titleEl) titleEl.innerText = titles[tabId] || 'TV-Hub';
-
-    // Show Selected Section
+    // Show Selected Window / Tab
     document.querySelectorAll('.tab-content').forEach(section => {
       section.style.display = section.id === `tab-${tabId}` ? 'block' : 'none';
     });
@@ -102,10 +63,6 @@ const App = {
     } else if (tabId === 'apps') {
       this.loadInstalledApps();
     }
-
-    // Close mobile drawer if open
-    const sidebar = document.querySelector('.app-sidebar');
-    if (sidebar) sidebar.classList.remove('mobile-open');
   },
 
   // ---------------------------------------------------------------------------
@@ -123,8 +80,6 @@ const App = {
       const dot = document.getElementById('header-status-dot');
       const name = document.getElementById('header-device-model');
       const ip = document.getElementById('header-device-ip');
-      const sidebarModel = document.getElementById('sidebar-device-model');
-      const sidebarIp = document.getElementById('sidebar-device-ip');
       const heroModel = document.getElementById('hero-tv-model');
       const heroIp = document.getElementById('hero-tv-ip');
       const heroStatus = document.getElementById('hero-tv-status');
@@ -139,16 +94,14 @@ const App = {
         if (name) name.innerText = modelName;
         if (ip) ip.innerText = data.target;
 
-        if (sidebarModel) sidebarModel.innerText = modelName;
-        if (sidebarIp) sidebarIp.innerText = data.target;
-
         if (heroModel) heroModel.innerText = modelName;
         if (heroIp) heroIp.innerText = data.target;
         if (heroStatus) {
           heroStatus.className = 'status-indicator-dot online';
-          heroStatus.nextElementSibling.innerText = 'Online';
+          heroStatus.innerText = 'ONLINE (Port 5555)';
+          heroStatus.style.color = '#00ff66';
         }
-        if (heroOs) heroOs.innerText = `Android ${data.androidVersion || '9'}`;
+        if (heroOs) heroOs.innerText = `Android ${data.androidVersion || '9'} (SDK 28)`;
         if (heroRes) heroRes.innerText = data.displaySize || '1280x720';
 
         // Update TV resolution for Cast scaling
@@ -163,12 +116,12 @@ const App = {
         }
       } else {
         if (dot) dot.className = 'status-indicator-dot offline';
-        if (name) name.innerText = 'Disconnected';
+        if (name) name.innerText = 'DISCONNECTED';
         if (ip) ip.innerText = data.target || '192.168.0.108:5555';
-        if (sidebarModel) sidebarModel.innerText = 'Disconnected';
         if (heroStatus) {
           heroStatus.className = 'status-indicator-dot offline';
-          heroStatus.nextElementSibling.innerText = 'Disconnected';
+          heroStatus.innerText = 'OFFLINE';
+          heroStatus.style.color = '#ff0000';
         }
       }
     } catch (err) {
@@ -202,51 +155,46 @@ const App = {
     const statusText = document.getElementById('discovery-status-text');
     const btn = document.getElementById('btn-auto-discover');
 
-    if (btn) btn.innerHTML = '<svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Scanning Network...';
-    if (statusText) statusText.innerText = 'Probing subnet on port 5555 & mDNS services...';
-    if (listEl) listEl.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-secondary);">Scanning local Wi-Fi for Android TVs...</div>';
+    if (btn) btn.innerText = 'Probing Subnet...';
+    if (statusText) statusText.innerText = 'Scanning subnet on port 5555 & mDNS services...';
+    if (listEl) listEl.innerHTML = '<div style="padding: 12px; font-family: var(--dp-typography-mono);">PROBING 192.168.0.1-254... PLEASE WAIT</div>';
 
     try {
       const res = await fetch('/api/discover');
       const data = await res.json();
-      if (statusText) statusText.innerText = `Discovered ${data.count} device(s) on ${data.subnet}.x`;
+      if (statusText) statusText.innerText = `Scan complete: Found ${data.count} host(s) on ${data.subnet}.x`;
 
       if (!listEl) return;
       if (!data.discovered || data.discovered.length === 0) {
         listEl.innerHTML = `
-          <div style="padding: 32px; text-align: center;">
-            <p style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">No Android TVs Found</p>
-            <p style="font-size: 13px; color: var(--text-secondary);">Ensure Wireless ADB is turned ON in Developer Options.</p>
+          <div style="padding: 16px; font-family: var(--dp-typography-mono);">
+            [!] No active ADB hosts detected on subnet.<br>
+            Ensure Wireless Debugging is ENABLED on TV.
           </div>
         `;
         return;
       }
 
       listEl.innerHTML = data.discovered.map(dev => `
-        <div class="ios-card" style="padding: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--surface-secondary); display: flex; align-items: center; justify-content: center; color: var(--accent);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+        <div style="background: #ffffff; border: 1px solid #808080; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 700; font-size: 13.5px;">
+              <span class="status-indicator-dot ${dev.connected ? 'online' : 'offline'}"></span>
+              ${dev.model || 'Android TV'}
             </div>
-            <div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span class="status-indicator-dot ${dev.connected ? 'online' : 'offline'}"></span>
-                <span style="font-size: 14px; font-weight: 600;">${dev.model || 'Android TV'}</span>
-              </div>
-              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
-                ${dev.ip}:${dev.port} &bull; <span class="meta-pill" style="font-size: 10px;">${dev.source}</span>
-              </div>
+            <div style="font-family: var(--dp-typography-mono); font-size: 11px; color: #555; margin-top: 2px;">
+              HOST: ${dev.ip}:${dev.port} &bull; SOURCE: ${dev.source}
             </div>
           </div>
-          <button class="ios-btn ${dev.connected ? 'ios-btn-secondary' : 'ios-btn-primary'} ios-btn-sm" onclick="App.connectToTv('${dev.ip}', '${dev.port}')">
-            ${dev.connected ? 'Connected' : 'Connect'}
+          <button class="retro-btn ${dev.connected ? '' : 'retro-btn-accent'} retro-btn-sm" onclick="App.connectToTv('${dev.ip}', '${dev.port}')">
+            ${dev.connected ? 'LINKED' : 'CONNECT'}
           </button>
         </div>
       `).join('');
     } catch (err) {
       if (statusText) statusText.innerText = 'Discovery Failed: ' + err.message;
     } finally {
-      if (btn) btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Scan Network for TVs';
+      if (btn) btn.innerText = 'Scan Subnet for TVs';
     }
   },
 
@@ -291,7 +239,7 @@ const App = {
             Remote.sendText(val);
             input.value = '';
             if (charCounter) charCounter.innerText = '0 characters';
-            this.showToast('Text Sent', `Forwarded "${val.slice(0, 24)}" to TV`);
+            this.showToast('Text Sent', `Sent "${val.slice(0, 20)}" to TV`);
           }
         }
       });
@@ -304,7 +252,7 @@ const App = {
           Remote.sendText(val);
           input.value = '';
           if (charCounter) charCounter.innerText = '0 characters';
-          this.showToast('Text Sent', `Forwarded "${val.slice(0, 24)}" to TV`);
+          this.showToast('Text Sent', `Sent "${val.slice(0, 20)}" to TV`);
         }
       });
     }
@@ -316,19 +264,19 @@ const App = {
           const text = await navigator.clipboard.readText();
           if (text) {
             await Remote.sendText(text);
-            this.showToast('Pasted to TV', `Sent: "${text.slice(0, 30)}${text.length > 30 ? '...' : ''}"`, 'success');
+            this.showToast('Clipboard Sent', `Transmitted: "${text.slice(0, 25)}"`, 'success');
           } else {
-            this.showToast('Clipboard Empty', 'No text in clipboard', 'warning');
+            this.showToast('Empty Buffer', 'Clipboard contains no text', 'warning');
           }
         } catch (err) {
-          this.showToast('Clipboard Error', 'Check browser clipboard permissions', 'danger');
+          this.showToast('Clipboard Error', 'Check browser clipboard permission', 'danger');
         }
       });
     }
   },
 
   // ---------------------------------------------------------------------------
-  // File Transfer (AirDrop Style)
+  // File Transfer (Retro File Push)
   // ---------------------------------------------------------------------------
   initFileSender() {
     const dropzone = document.getElementById('file-dropzone');
@@ -340,16 +288,16 @@ const App = {
 
     dropzone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropzone.classList.add('dragover');
+      dropzone.style.background = '#ffffd0';
     });
 
     dropzone.addEventListener('dragleave', () => {
-      dropzone.classList.remove('dragover');
+      dropzone.style.background = '#ffffff';
     });
 
     dropzone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropzone.classList.remove('dragover');
+      dropzone.style.background = '#ffffff';
       if (e.dataTransfer.files.length > 0) {
         this.uploadFile(e.dataTransfer.files[0]);
       }
@@ -365,13 +313,11 @@ const App = {
   async uploadFile(file) {
     const card = document.getElementById('upload-progress-card');
     const filenameEl = document.getElementById('upload-filename');
-    const barEl = document.getElementById('upload-progress-bar');
     const statusText = document.getElementById('upload-status-text');
 
     if (card) card.style.display = 'block';
     if (filenameEl) filenameEl.innerText = file.name;
-    if (statusText) statusText.innerText = `Pushing to /sdcard/Download/... (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
-    if (barEl) barEl.className = 'progress-bar-fill indeterminate';
+    if (statusText) statusText.innerText = `Pushing to TV... (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
 
     const formData = new FormData();
     formData.append('file', file);
@@ -383,15 +329,11 @@ const App = {
       });
       const data = await res.json();
       if (data.success) {
-        if (barEl) {
-          barEl.className = 'progress-bar-fill';
-          barEl.style.width = '100%';
-        }
-        if (statusText) statusText.innerText = `Transferred to ${data.remotePath}`;
-        this.showToast('Transfer Complete', `${file.name} sent to TV`, 'success');
+        if (statusText) statusText.innerText = `Pushed to ${data.remotePath}`;
+        this.showToast('Push Complete', `${file.name} sent to TV`, 'success');
         this.recordActivity(`File Sent: ${file.name}`);
       } else {
-        if (statusText) statusText.innerText = `Upload failed: ${data.error}`;
+        if (statusText) statusText.innerText = `Failed: ${data.error}`;
         this.showToast('Transfer Failed', data.error, 'danger');
       }
     } catch (err) {
@@ -439,37 +381,37 @@ const App = {
 
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Downloading & Installing...';
+      btn.innerText = 'Streaming Installation...';
     }
     if (statusEl) {
       statusEl.style.display = 'block';
-      statusEl.innerText = 'Detecting CPU architecture and streaming APK...';
+      statusEl.innerText = '[1/3] Detecting CPU ABI -> [2/3] Downloading Release -> [3/3] ADB Install...';
     }
 
     try {
       const res = await fetch('/api/apps/install-tvbro', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
-        this.showToast('App Installed', 'TV Bro is now installed on your TV!', 'success');
+        this.showToast('Installed', 'TV Bro is now installed on TV!', 'success');
         this.recordActivity('Installed TV Bro (Adblock Browser)');
-        if (statusEl) statusEl.innerText = 'TV Bro successfully installed!';
+        if (statusEl) statusEl.innerText = 'STATUS: TV Bro successfully installed via ADB stream!';
         this.loadInstalledApps();
       } else {
         this.showToast('Install Failed', data.error, 'danger');
-        if (statusEl) statusEl.innerText = `Installation failed: ${data.error}`;
+        if (statusEl) statusEl.innerText = `ERROR: ${data.error}`;
       }
     } catch (err) {
       this.showToast('Install Error', err.message, 'danger');
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Install TV Bro';
+        btn.innerText = '⚡ 1-Click Install TV Bro';
       }
     }
   },
 
   async installApk(file) {
-    this.showToast('Sideloading APK', `Installing ${file.name}...`);
+    this.showToast('Sideloading', `Installing ${file.name}...`);
     const formData = new FormData();
     formData.append('apk', file);
 
@@ -477,7 +419,7 @@ const App = {
       const res = await fetch('/api/apps/install', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.success) {
-        this.showToast('App Sideloaded', `Installed ${file.name}!`, 'success');
+        this.showToast('Package Installed', `Installed ${file.name}!`, 'success');
         this.recordActivity(`Sideloaded: ${file.name}`);
         this.loadInstalledApps();
       } else {
@@ -491,7 +433,7 @@ const App = {
   async loadInstalledApps() {
     const listEl = document.getElementById('installed-apps-grid');
     if (!listEl) return;
-    listEl.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-secondary);">Loading installed packages...</div>';
+    listEl.innerHTML = '<div style="padding: 12px; font-family: var(--dp-typography-mono);">Loading package manifest from TV...</div>';
 
     try {
       const res = await fetch('/api/apps/list');
@@ -499,13 +441,13 @@ const App = {
       this.installedApps = data.thirdParty || [];
 
       if (this.installedApps.length === 0) {
-        listEl.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-secondary);">No 3rd-party apps detected.</div>';
+        listEl.innerHTML = '<div style="padding: 12px; font-family: var(--dp-typography-mono);">[!] No third-party applications found on TV.</div>';
         return;
       }
 
       this.renderApps(this.installedApps);
     } catch (err) {
-      listEl.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--danger);">Failed to load packages: ${err.message}</div>`;
+      listEl.innerHTML = `<div style="padding: 12px; color: #ff0000; font-family: var(--dp-typography-mono);">Error: ${err.message}</div>`;
     }
   },
 
@@ -514,21 +456,14 @@ const App = {
     if (!listEl) return;
 
     listEl.innerHTML = apps.map(pkg => `
-      <div class="app-item-card">
-        <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
-          <div class="app-icon-default">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          </div>
-          <div style="overflow: hidden;">
-            <div style="font-weight: 600; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${this.formatAppLabel(pkg)}</div>
-            <div style="font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pkg}</div>
-          </div>
+      <div style="background: #ffffff; border-bottom: 1px solid #c0c0c0; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="overflow: hidden; text-overflow: ellipsis; max-width: 65%;">
+          <strong style="font-size: 13.5px;">${this.formatAppLabel(pkg)}</strong>
+          <div style="font-family: var(--dp-typography-mono); font-size: 11px; color: #666;">${pkg}</div>
         </div>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button class="ios-btn ios-btn-tinted ios-btn-sm" onclick="App.launchApp('${pkg}')">Launch</button>
-          <button class="ios-btn ios-btn-danger ios-btn-sm" onclick="App.confirmUninstall('${pkg}')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
+        <div style="display: flex; gap: 4px;">
+          <button class="retro-btn retro-btn-sm retro-btn-accent" onclick="App.launchApp('${pkg}')">Launch</button>
+          <button class="retro-btn retro-btn-sm retro-btn-danger" onclick="App.confirmUninstall('${pkg}')">Uninstall</button>
         </div>
       </div>
     `).join('');
@@ -549,7 +484,7 @@ const App = {
   },
 
   confirmUninstall(packageName) {
-    this.confirm('Uninstall Application', `Are you sure you want to delete ${packageName} from your TV?`, async () => {
+    this.confirm('Uninstall Application', `Delete package ${packageName} from TV?`, async () => {
       try {
         const res = await fetch('/api/apps/uninstall', {
           method: 'POST',
@@ -558,7 +493,7 @@ const App = {
         });
         const data = await res.json();
         if (data.success) {
-          this.showToast('App Uninstalled', packageName, 'success');
+          this.showToast('Uninstalled', packageName, 'success');
           this.recordActivity(`Uninstalled: ${packageName}`);
           this.loadInstalledApps();
         } else {
@@ -577,7 +512,7 @@ const App = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: `package:${packageName}` })
       });
-      this.showToast('App Launched', `Opened ${packageName} on TV`, 'success');
+      this.showToast('Launched', `Opened ${packageName}`, 'success');
       this.recordActivity(`Launched: ${packageName}`);
     } catch (err) {
       this.showToast('Launch Error', err.message, 'danger');
@@ -607,7 +542,7 @@ const App = {
   },
 
   async launchUrl(url) {
-    this.showToast('Opening Link', `Launching ${url} in TV browser...`);
+    this.showToast('Launching URL', `Opening ${url} on TV...`);
     try {
       const res = await fetch('/api/shortcuts/launch', {
         method: 'POST',
@@ -631,7 +566,7 @@ const App = {
     this.customShortcuts.push(shortcut);
     localStorage.setItem('bh_custom_shortcuts', JSON.stringify(this.customShortcuts));
     this.renderCustomShortcuts();
-    this.showToast('Shortcut Added', `Created bookmark for ${name}`, 'success');
+    this.showToast('Saved', `Added bookmark ${name}`, 'success');
   },
 
   loadCustomShortcuts() {
@@ -649,16 +584,11 @@ const App = {
     if (!container) return;
 
     container.innerHTML = this.customShortcuts.map(s => `
-      <div class="shortcut-tile">
-        <button class="ios-btn ios-btn-sm" onclick="event.stopPropagation(); App.deleteCustomShortcut(${s.id})" style="position: absolute; top: 10px; right: 10px; padding: 4px; border-radius: 9999px; background: transparent; border: none; color: var(--text-tertiary);">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-        <div class="shortcut-icon-circle" style="background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        </div>
-        <div style="font-weight: 600; font-size: 14px; margin-top: 4px;">${s.name}</div>
-        <div style="font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">${s.url}</div>
-        <button class="ios-btn ios-btn-tinted ios-btn-sm" onclick="App.launchUrl('${s.url}')" style="margin-top: 8px; width: 100%;">Open on TV</button>
+      <div class="retro-well" style="text-align: center; position: relative;">
+        <button class="retro-btn retro-btn-sm" onclick="event.stopPropagation(); App.deleteCustomShortcut(${s.id})" style="position: absolute; top: 4px; right: 4px; padding: 1px 5px; font-size: 10px;">✕</button>
+        <h3 style="font-size: 15px; margin-bottom: 2px;">🌐 ${s.name}</h3>
+        <p style="font-family: var(--dp-typography-mono); font-size: 11px; color: #555; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 8px;">${s.url}</p>
+        <button class="retro-btn retro-btn-sm retro-btn-accent" onclick="App.launchUrl('${s.url}')" style="width: 100%;">Open on TV</button>
       </div>
     `).join('');
   },
@@ -667,63 +597,7 @@ const App = {
     this.customShortcuts = this.customShortcuts.filter(s => s.id !== id);
     localStorage.setItem('bh_custom_shortcuts', JSON.stringify(this.customShortcuts));
     this.renderCustomShortcuts();
-    this.showToast('Shortcut Removed', 'Bookmark deleted');
-  },
-
-  // ---------------------------------------------------------------------------
-  // Appearance & Theme Settings
-  // ---------------------------------------------------------------------------
-  initThemeSettings() {
-    const savedTheme = localStorage.getItem('tvhub_theme') || 'system';
-    this.setTheme(savedTheme, false);
-
-    document.querySelectorAll('[data-set-theme]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const theme = btn.getAttribute('data-set-theme');
-        this.setTheme(theme, true);
-      });
-    });
-
-    const savedAccent = localStorage.getItem('tvhub_accent') || 'blue';
-    this.setAccent(savedAccent, false);
-
-    document.querySelectorAll('[data-set-accent]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const accent = btn.getAttribute('data-set-accent');
-        this.setAccent(accent, true);
-      });
-    });
-  },
-
-  setTheme(theme, notify = true) {
-    document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('tvhub_theme', theme);
-
-    // Update segmented control buttons
-    document.querySelectorAll('[data-set-theme]').forEach(btn => {
-      if (btn.getAttribute('data-set-theme') === theme) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    if (notify) this.showToast('Appearance Updated', `Switched appearance to ${theme.toUpperCase()}`);
-  },
-
-  setAccent(accent, notify = true) {
-    document.body.setAttribute('data-accent', accent);
-    localStorage.setItem('tvhub_accent', accent);
-
-    document.querySelectorAll('[data-set-accent]').forEach(btn => {
-      if (btn.getAttribute('data-set-accent') === accent) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    if (notify) this.showToast('Accent Updated', `Theme accent set to ${accent.toUpperCase()}`);
+    this.showToast('Deleted', 'Bookmark removed');
   },
 
   // ---------------------------------------------------------------------------
@@ -736,21 +610,13 @@ const App = {
 
     if (!overlay || !input || !list) return;
 
-    // Search input filtering
     input.addEventListener('input', (e) => {
       this.filterPalette(e.target.value.toLowerCase());
     });
 
-    // Close on overlay backdrop click
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) this.closePalette();
     });
-
-    // Quick trigger button in topbar
-    const trigger = document.getElementById('btn-command-palette-trigger');
-    if (trigger) {
-      trigger.addEventListener('click', () => this.togglePalette());
-    }
   },
 
   togglePalette() {
@@ -785,29 +651,25 @@ const App = {
     if (!list) return;
 
     const commands = [
-      { label: 'Go to Overview', sub: 'Navigation', icon: 'home', action: () => this.switchTab('overview') },
-      { label: 'Open Remote Control', sub: 'Navigation', icon: 'tv', action: () => this.switchTab('remote') },
-      { label: 'Start Screen Mirror', sub: 'Action', icon: 'airplay', action: () => { this.switchTab('cast'); Cast.startStream(); } },
-      { label: 'Send Clipboard to TV', sub: 'Action', icon: 'clipboard', action: () => document.getElementById('btn-paste-clipboard')?.click() },
-      { label: 'Upload / Send File', sub: 'Navigation', icon: 'folder', action: () => this.switchTab('files') },
-      { label: 'Install TV Bro Browser', sub: 'Action', icon: 'download', action: () => this.installTvBro() },
-      { label: 'Open YouTube on TV', sub: 'Website', icon: 'globe', action: () => this.launchUrl('https://youtube.com') },
-      { label: 'Scan for Local TVs', sub: 'Network', icon: 'radar', action: () => { this.switchTab('discovery'); this.runDiscovery(); } },
-      { label: 'Wake TV Up', sub: 'Remote', icon: 'power', action: () => Remote.sendKey('WAKEUP', 224) },
-      { label: 'Put TV to Sleep', sub: 'Remote', icon: 'moon', action: () => Remote.sendKey('SLEEP', 223) },
-      { label: 'Keyboard Shortcuts Reference', sub: 'Help', icon: 'help', action: () => this.openKeyboardShortcutsModal() },
-      { label: 'Toggle Light / Dark Appearance', sub: 'Settings', icon: 'moon', action: () => {
-        const cur = document.body.getAttribute('data-theme');
-        this.setTheme(cur === 'dark' ? 'light' : 'dark');
-      }}
+      { label: 'Switch to Overview', sub: 'Window', action: () => this.switchTab('overview') },
+      { label: 'Open Remote Console', sub: 'Window', action: () => this.switchTab('remote') },
+      { label: 'Start CRT Screen Mirror', sub: 'Action', action: () => { this.switchTab('cast'); Cast.startStream(); } },
+      { label: 'Send Clipboard Buffer to TV', sub: 'Action', action: () => document.getElementById('btn-paste-clipboard')?.click() },
+      { label: 'File Dispatcher & Push', sub: 'Window', action: () => this.switchTab('files') },
+      { label: 'Install TV Bro Adblock Browser', sub: 'Action', action: () => this.installTvBro() },
+      { label: 'Open YouTube on TV', sub: 'Intent', action: () => this.launchUrl('https://youtube.com') },
+      { label: 'Scan Local Subnet for TVs', sub: 'Network', action: () => { this.switchTab('discovery'); this.runDiscovery(); } },
+      { label: 'Wake TV Display', sub: 'Power', action: () => Remote.sendKey('WAKEUP', 224) },
+      { label: 'Sleep TV Display', sub: 'Power', action: () => Remote.sendKey('SLEEP', 223) },
+      { label: 'Keyboard Driver Documentation', sub: 'Help', action: () => this.openKeyboardShortcutsModal() }
     ];
 
     const filtered = query ? commands.filter(c => c.label.toLowerCase().includes(query) || c.sub.toLowerCase().includes(query)) : commands;
 
     list.innerHTML = filtered.map((cmd, i) => `
       <div class="palette-item ${i === 0 ? 'selected' : ''}" onclick="App.executePaletteAction(${i})">
-        <div style="font-weight: 500; font-size: 13.5px;">${cmd.label}</div>
-        <span class="meta-pill" style="margin-left: auto; font-size: 10px;">${cmd.sub}</span>
+        <span>&gt; ${cmd.label}</span>
+        <span class="meta-pill" style="font-size: 10px;">${cmd.sub}</span>
       </div>
     `).join('');
 
@@ -853,17 +715,14 @@ const App = {
     if (!list) return;
 
     if (this.activityLog.length === 0) {
-      list.innerHTML = '<div style="padding: 16px; text-align: center; color: var(--text-tertiary); font-size: 13px;">No recent actions recorded.</div>';
+      list.innerHTML = '<div style="color: #666; font-family: var(--dp-typography-mono);">[Guestbook empty. Execute TV commands to populate.]</div>';
       return;
     }
 
-    list.innerHTML = this.activityLog.slice(0, 6).map(act => `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--separator-subtle);">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <div style="width: 6px; height: 6px; border-radius: 9999px; background: var(--accent);"></div>
-          <span style="font-size: 13px; font-weight: 500;">${act.title}</span>
-        </div>
-        <span style="font-size: 11px; color: var(--text-tertiary);" class="tabular-nums">${act.time}</span>
+    list.innerHTML = this.activityLog.slice(0, 8).map(act => `
+      <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dotted #ccc; font-family: var(--dp-typography-mono); font-size: 12px;">
+        <span>&bull; ${act.title}</span>
+        <span style="color: #666;">${act.time}</span>
       </div>
     `).join('');
   },
@@ -872,31 +731,17 @@ const App = {
     this.activityLog = [];
     localStorage.removeItem('tvhub_activity_log');
     this.renderActivityLog();
-    this.showToast('History Cleared', 'Activity feed reset');
+    this.showToast('History Cleared', 'Log reset');
   },
 
   // ---------------------------------------------------------------------------
-  // iOS-Style Dynamic Island Toasts
+  // Toast Notification
   // ---------------------------------------------------------------------------
   showToast(title, message = '', type = 'info') {
     let toast = document.getElementById('global-ios-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'global-ios-toast';
-      toast.className = 'ios-toast';
-      document.body.appendChild(toast);
-    }
+    if (!toast) return;
 
-    const dotColor = type === 'success' ? 'var(--success)' : (type === 'danger' ? 'var(--danger)' : (type === 'warning' ? 'var(--warning)' : 'var(--accent)'));
-
-    toast.innerHTML = `
-      <div class="toast-dot" style="background: ${dotColor};"></div>
-      <div style="display: flex; flex-direction: column;">
-        <span style="font-weight: 600; font-size: 13px;">${title}</span>
-        ${message ? `<span style="font-size: 11px; color: var(--text-secondary);">${message}</span>` : ''}
-      </div>
-    `;
-
+    toast.innerHTML = `<span><strong>${title}</strong>: ${message}</span>`;
     toast.classList.add('show');
     clearTimeout(this._toastTimeout);
     this._toastTimeout = setTimeout(() => {
@@ -905,7 +750,7 @@ const App = {
   },
 
   // ---------------------------------------------------------------------------
-  // Modals & Native Confirmations
+  // Modals & Confirmations
   // ---------------------------------------------------------------------------
   confirm(title, message, onConfirm) {
     const modal = document.getElementById('modal-confirm-dialog');

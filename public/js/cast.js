@@ -1,5 +1,5 @@
 // ==========================================================================
-// TV-HUB // SCREEN CAST & INTERACTIVE TRACKPAD ENGINE (iOS 18)
+// TV-HUB // SCREEN CAST & INTERACTIVE TRACKPAD ENGINE (RETRO DESKTOP)
 // ==========================================================================
 
 const Cast = {
@@ -37,8 +37,7 @@ const Cast = {
       this.ws.binaryType = 'arraybuffer';
 
       this.ws.onopen = () => {
-        console.log('[Cast] WebSocket connected');
-        this.updateStatus('Ready to Mirror', 'online');
+        this.updateStatus('Stream Socket Connected', 'online');
       };
 
       this.ws.onmessage = (event) => {
@@ -47,11 +46,11 @@ const Cast = {
             const msg = JSON.parse(event.data);
             if (msg.event === 'stream_started') {
               this.isStreaming = true;
-              this.updateStatus('Live Mirroring Active', 'online');
+              this.updateStatus('Live Mirroring Active [30 FPS]', 'online');
               this.updateToggleButtons(true);
             } else if (msg.event === 'stream_stopped') {
               this.isStreaming = false;
-              this.updateStatus('Mirroring Paused', 'offline');
+              this.updateStatus('Mirroring Idle', 'offline');
               this.updateToggleButtons(false);
             }
           } catch (e) {}
@@ -110,7 +109,7 @@ const Cast = {
       }
       this.isStreaming = true;
       this.streamMode = 'h264';
-      this.updateStatus('Live 30 FPS Stream', 'online');
+      this.updateStatus('Live H.264 Stream Active', 'online');
       this.updateToggleButtons(true);
 
       if (window.App && typeof window.App.recordActivity === 'function') {
@@ -151,15 +150,13 @@ const Cast = {
   updateToggleButtons(isLive) {
     const btn = document.getElementById('btn-toggle-cast');
     if (btn) {
-      btn.innerHTML = isLive
-        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Stop Mirroring'
-        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Start Mirroring';
-      btn.className = isLive ? 'ios-btn ios-btn-danger' : 'ios-btn ios-btn-primary';
+      btn.innerText = isLive ? '⏹ Stop Mirror' : '▶ Start Mirroring';
+      btn.className = isLive ? 'retro-btn retro-btn-danger' : 'retro-btn retro-btn-accent';
     }
 
     const heroBtn = document.getElementById('btn-hero-cast');
     if (heroBtn) {
-      heroBtn.innerText = isLive ? 'Stop Mirror' : 'Start Mirror';
+      heroBtn.innerText = isLive ? '⏹ Stop Mirror' : '📺 Start Screen Mirror';
     }
   },
 
@@ -212,7 +209,6 @@ const Cast = {
     const target = this.viewportEl;
     if (!target) return;
 
-    // Normalize coordinates based on displayed letterboxed/scaled video frame
     const getScaledCoords = (clientX, clientY) => {
       const rect = target.getBoundingClientRect();
       const xRatio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
@@ -225,7 +221,6 @@ const Cast = {
       };
     };
 
-    // Smooth hover indicator
     target.addEventListener('mousemove', (e) => {
       const coords = getScaledCoords(e.clientX, e.clientY);
       if (this.indicatorEl) {
@@ -263,15 +258,12 @@ const Cast = {
       const dy = Math.abs(endY - this.pointerStartY);
 
       if (dx < 16 && dy < 16) {
-        // Tap
         this.sendTap(endX, endY);
       } else {
-        // Swipe
         this.sendSwipe(this.pointerStartX, this.pointerStartY, endX, endY, duration);
       }
     });
 
-    // Trackpad scroll wheel to TV D-Pad / scroll
     target.addEventListener('wheel', (e) => {
       e.preventDefault();
       if (e.deltaY > 24) {

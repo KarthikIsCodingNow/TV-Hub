@@ -1,5 +1,5 @@
 // ==========================================================================
-// TV-HUB // REMOTE CONTROLLER & KEYBOARD DISPATCHER
+// TV-HUB // REMOTE CONTROLLER & KEYBOARD DISPATCHER (iOS 18 EDITION)
 // ==========================================================================
 
 const Remote = {
@@ -9,18 +9,22 @@ const Remote = {
   init() {
     this.bindButtons();
     this.bindKeyboard();
-    this.bindClipboard();
   },
 
   async sendKey(keyName, keycode = null) {
-    // Physical tactile visual feedback on matching button
-    const btn = document.querySelector(`[data-key="${keyName}"]`);
-    if (btn) {
+    // Tactile visual feedback on matching button(s)
+    const matchingButtons = document.querySelectorAll(`[data-key="${keyName}"]`);
+    matchingButtons.forEach(btn => {
       btn.classList.add('pressed');
-      setTimeout(() => btn.classList.remove('pressed'), 120);
-    }
+      setTimeout(() => btn.classList.remove('pressed'), 140);
+    });
 
     try {
+      // Record activity in dashboard history
+      if (window.App && typeof window.App.recordActivity === 'function') {
+        window.App.recordActivity(`Remote: ${keyName.replace('DPAD_', '')}`);
+      }
+
       // Use WebSocket if open, otherwise fallback to REST API
       if (window.Cast && window.Cast.ws && window.Cast.ws.readyState === WebSocket.OPEN) {
         window.Cast.ws.send(JSON.stringify({ action: 'key', key: keyName, keycode }));
@@ -39,6 +43,10 @@ const Remote = {
   async sendText(text) {
     if (!text) return;
     try {
+      if (window.App && typeof window.App.recordActivity === 'function') {
+        window.App.recordActivity(`Text Sent: "${text.slice(0, 20)}${text.length > 20 ? '...' : ''}"`);
+      }
+
       if (window.Cast && window.Cast.ws && window.Cast.ws.readyState === WebSocket.OPEN) {
         window.Cast.ws.send(JSON.stringify({ action: 'text', text }));
       } else {
@@ -54,29 +62,40 @@ const Remote = {
   },
 
   bindButtons() {
-    // D-Pad and Control Buttons
-    document.querySelectorAll('[data-key]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const key = btn.getAttribute('data-key');
-        const code = btn.getAttribute('data-keycode');
-        this.sendKey(key, code ? parseInt(code, 10) : null);
-      });
+    // D-Pad and Control Buttons everywhere (full remote + overview preview)
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-key]');
+      if (!btn) return;
+      e.preventDefault();
+      const key = btn.getAttribute('data-key');
+      const code = btn.getAttribute('data-keycode');
+      this.sendKey(key, code ? parseInt(code, 10) : null);
     });
   },
 
   bindKeyboard() {
     window.addEventListener('keydown', (e) => {
-      // Ignore if user is typing inside an input or textarea
-      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        if (e.key === 'Enter' && document.activeElement.id === 'text-input-field') {
-          e.preventDefault();
-          const val = document.activeElement.value;
-          if (val) {
-            this.sendText(val);
-            document.activeElement.value = '';
-          }
+      // Never intercept when user is typing inside an input, textarea or contenteditable element
+      const activeEl = document.activeElement;
+      if (activeEl && (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) || activeEl.isContentEditable)) {
+        // Allow Command Palette Escape
+        if (e.key === 'Escape' && activeEl.id === 'palette-search-input') {
+          App.closePalette();
         }
+        return;
+      }
+
+      // Command Palette Shortcut: ⌘K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        App.togglePalette();
+        return;
+      }
+
+      // Shortcut Help: ?
+      if (e.key === '?' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        App.openKeyboardShortcutsModal();
         return;
       }
 
@@ -130,39 +149,6 @@ const Remote = {
         e.preventDefault();
       }
     });
-  },
-
-  bindClipboard() {
-    // Text sending form
-    const sendBtn = document.getElementById('btn-send-text');
-    const input = document.getElementById('text-input-field');
-    if (sendBtn && input) {
-      sendBtn.addEventListener('click', () => {
-        const val = input.value.trim();
-        if (val) {
-          this.sendText(val);
-          input.value = '';
-        }
-      });
-    }
-
-    // Paste laptop clipboard directly to TV
-    const pasteBtn = document.getElementById('btn-paste-clipboard');
-    if (pasteBtn) {
-      pasteBtn.addEventListener('click', async () => {
-        try {
-          const text = await navigator.clipboard.readText();
-          if (text) {
-            await this.sendText(text);
-            App.showToast(`Pasted to TV: "${text.slice(0, 30)}${text.length > 30 ? '...' : ''}"`);
-          } else {
-            App.showToast('Clipboard is empty');
-          }
-        } catch (err) {
-          App.showToast('Clipboard read error: Check browser permission', 'error');
-        }
-      });
-    }
   }
 };
 

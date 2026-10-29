@@ -1,12 +1,12 @@
 // ==========================================================================
-// TV-HUB // SCREEN CAST & INTERACTIVE TRACKPAD/MOUSE ENGINE
+// TV-HUB // SCREEN CAST & INTERACTIVE TRACKPAD ENGINE (iOS 18)
 // ==========================================================================
 
 const Cast = {
   ws: null,
   jmuxer: null,
   isStreaming: false,
-  streamMode: 'h264', // 'h264' or 'snapshot'
+  streamMode: 'h264',
   snapshotInterval: null,
   tvWidth: 1280,
   tvHeight: 720,
@@ -31,62 +31,68 @@ const Cast = {
   connectWebSocket() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws/cast`;
-    
-    this.ws = new WebSocket(wsUrl);
-    this.ws.binaryType = 'arraybuffer';
 
-    this.ws.onopen = () => {
-      console.log('[Cast] WebSocket connected');
-      this.updateStatus('CONNECTED (READY TO CAST)', 'online');
-    };
+    try {
+      this.ws = new WebSocket(wsUrl);
+      this.ws.binaryType = 'arraybuffer';
 
-    this.ws.onmessage = (event) => {
-      if (typeof event.data === 'string') {
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.event === 'stream_started') {
-            this.isStreaming = true;
-            this.updateStatus('LIVE SCREENCAST ACTIVE', 'online');
-          } else if (msg.event === 'stream_stopped') {
-            this.isStreaming = false;
-            this.updateStatus('SCREENCAST PAUSED', 'offline');
-          }
-        } catch (e) {}
-      } else if (event.data instanceof ArrayBuffer) {
-        // Binary H.264 stream packet
-        if (this.jmuxer) {
+      this.ws.onopen = () => {
+        console.log('[Cast] WebSocket connected');
+        this.updateStatus('Ready to Mirror', 'online');
+      };
+
+      this.ws.onmessage = (event) => {
+        if (typeof event.data === 'string') {
           try {
-            this.jmuxer.feed({ video: new Uint8Array(event.data) });
-          } catch (err) {
-            console.warn('[Cast] JMuxer feed error:', err);
+            const msg = JSON.parse(event.data);
+            if (msg.event === 'stream_started') {
+              this.isStreaming = true;
+              this.updateStatus('Live Mirroring Active', 'online');
+              this.updateToggleButtons(true);
+            } else if (msg.event === 'stream_stopped') {
+              this.isStreaming = false;
+              this.updateStatus('Mirroring Paused', 'offline');
+              this.updateToggleButtons(false);
+            }
+          } catch (e) {}
+        } else if (event.data instanceof ArrayBuffer) {
+          // Binary H.264 stream packet
+          if (this.jmuxer) {
+            try {
+              this.jmuxer.feed({ video: new Uint8Array(event.data) });
+            } catch (err) {
+              console.warn('[Cast] JMuxer feed error:', err);
+            }
           }
         }
-      }
-    };
+      };
 
-    this.ws.onclose = () => {
-      console.log('[Cast] WebSocket disconnected. Reconnecting in 2s...');
-      this.updateStatus('DISCONNECTED - RETRYING...', 'offline');
-      setTimeout(() => this.connectWebSocket(), 2000);
-    };
+      this.ws.onclose = () => {
+        this.updateStatus('Disconnected', 'offline');
+        this.updateToggleButtons(false);
+        setTimeout(() => this.connectWebSocket(), 2500);
+      };
 
-    this.ws.onerror = (err) => {
-      console.error('[Cast] WebSocket error:', err);
-    };
+      this.ws.onerror = (err) => {
+        console.warn('[Cast] WebSocket error:', err);
+      };
+    } catch (e) {
+      console.error('[Cast] Failed to initialize WebSocket:', e);
+    }
   },
 
   startStream() {
     if (this.isStreaming) return;
 
     if (!window.JMuxer) {
-      console.warn('[Cast] JMuxer not loaded, falling back to snapshot mode');
+      console.warn('[Cast] JMuxer unavailable, using snapshot fallback');
       this.startSnapshotMode();
       return;
     }
 
     try {
-      this.videoEl.style.display = 'block';
-      this.canvasEl.style.display = 'none';
+      if (this.videoEl) this.videoEl.style.display = 'block';
+      if (this.canvasEl) this.canvasEl.style.display = 'none';
 
       if (!this.jmuxer) {
         this.jmuxer = new JMuxer({
@@ -95,9 +101,7 @@ const Cast = {
           flushingTime: 0,
           fps: 30,
           debug: false,
-          onError: (data) => {
-            console.warn('[Cast] JMuxer internal error:', data);
-          }
+          onError: (data) => console.warn('[Cast] JMuxer error:', data)
         });
       }
 
@@ -106,9 +110,14 @@ const Cast = {
       }
       this.isStreaming = true;
       this.streamMode = 'h264';
-      this.updateStatus('STREAMING AT 30 FPS', 'online');
+      this.updateStatus('Live 30 FPS Stream', 'online');
+      this.updateToggleButtons(true);
+
+      if (window.App && typeof window.App.recordActivity === 'function') {
+        window.App.recordActivity('Started Screen Mirroring');
+      }
     } catch (e) {
-      console.error('[Cast] Failed to start H.264 stream:', e);
+      console.error('[Cast] Start stream error:', e);
       this.startSnapshotMode();
     }
   },
@@ -123,18 +132,34 @@ const Cast = {
       this.snapshotInterval = null;
     }
     this.isStreaming = false;
-    this.updateStatus('STREAM PAUSED', 'offline');
+    this.updateStatus('Stream Paused', 'offline');
+    this.updateToggleButtons(false);
+
+    if (window.App && typeof window.App.recordActivity === 'function') {
+      window.App.recordActivity('Stopped Screen Mirroring');
+    }
   },
 
   toggleStream() {
     if (this.isStreaming) {
       this.stopStream();
-      document.getElementById('btn-toggle-cast').innerText = 'START CASTING';
-      document.getElementById('btn-toggle-cast').classList.replace('bh-btn-red', 'bh-btn-blue');
     } else {
       this.startStream();
-      document.getElementById('btn-toggle-cast').innerText = 'STOP CASTING';
-      document.getElementById('btn-toggle-cast').classList.replace('bh-btn-blue', 'bh-btn-red');
+    }
+  },
+
+  updateToggleButtons(isLive) {
+    const btn = document.getElementById('btn-toggle-cast');
+    if (btn) {
+      btn.innerHTML = isLive
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Stop Mirroring'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Start Mirroring';
+      btn.className = isLive ? 'ios-btn ios-btn-danger' : 'ios-btn ios-btn-primary';
+    }
+
+    const heroBtn = document.getElementById('btn-hero-cast');
+    if (heroBtn) {
+      heroBtn.innerText = isLive ? 'Stop Mirror' : 'Start Mirror';
     }
   },
 
@@ -142,15 +167,17 @@ const Cast = {
   startSnapshotMode() {
     this.streamMode = 'snapshot';
     this.isStreaming = true;
-    this.videoEl.style.display = 'none';
-    this.canvasEl.style.display = 'block';
-    this.updateStatus('SNAPSHOT STREAM ACTIVE', 'online');
+    if (this.videoEl) this.videoEl.style.display = 'none';
+    if (this.canvasEl) this.canvasEl.style.display = 'block';
+    this.updateStatus('Snapshot Mode Active', 'online');
+    this.updateToggleButtons(true);
 
     const updateSnapshot = async () => {
       if (!this.isStreaming || this.streamMode !== 'snapshot') return;
       try {
         const img = new Image();
         img.onload = () => {
+          if (!this.canvasEl) return;
           const ctx = this.canvasEl.getContext('2d');
           this.canvasEl.width = img.width;
           this.canvasEl.height = img.height;
@@ -165,26 +192,27 @@ const Cast = {
     this.snapshotInterval = setInterval(updateSnapshot, 1500);
   },
 
-  // Capture single snapshot on demand
   async captureSingleSnapshot() {
-    this.videoEl.style.display = 'none';
-    this.canvasEl.style.display = 'block';
+    if (this.videoEl) this.videoEl.style.display = 'none';
+    if (this.canvasEl) this.canvasEl.style.display = 'block';
     const img = new Image();
     img.onload = () => {
+      if (!this.canvasEl) return;
       const ctx = this.canvasEl.getContext('2d');
       this.canvasEl.width = img.width;
       this.canvasEl.height = img.height;
       ctx.drawImage(img, 0, 0);
-      App.showToast('Snapshot captured from TV');
+      App.showToast('Frame Refreshed', 'Snapshot updated from TV');
     };
     img.src = `/api/screen/shot?t=${Date.now()}`;
   },
 
-  // Interactive mouse/touch forwarding to TV
+  // Precision Mouse & Trackpad Interaction
   bindMouseAndTouch() {
     const target = this.viewportEl;
     if (!target) return;
 
+    // Normalize coordinates based on displayed letterboxed/scaled video frame
     const getScaledCoords = (clientX, clientY) => {
       const rect = target.getBoundingClientRect();
       const xRatio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
@@ -197,7 +225,7 @@ const Cast = {
       };
     };
 
-    // Pointer move / cursor crosshair indicator
+    // Smooth hover indicator
     target.addEventListener('mousemove', (e) => {
       const coords = getScaledCoords(e.clientX, e.clientY);
       if (this.indicatorEl) {
@@ -212,7 +240,6 @@ const Cast = {
       this.isPointerDown = false;
     });
 
-    // Pointer down
     target.addEventListener('mousedown', (e) => {
       e.preventDefault();
       this.isPointerDown = true;
@@ -222,7 +249,6 @@ const Cast = {
       this.pointerStartTime = Date.now();
     });
 
-    // Pointer up -> Tap or Swipe
     target.addEventListener('mouseup', (e) => {
       e.preventDefault();
       if (!this.isPointerDown) return;
@@ -236,7 +262,7 @@ const Cast = {
       const dx = Math.abs(endX - this.pointerStartX);
       const dy = Math.abs(endY - this.pointerStartY);
 
-      if (dx < 15 && dy < 15) {
+      if (dx < 16 && dy < 16) {
         // Tap
         this.sendTap(endX, endY);
       } else {
@@ -245,19 +271,18 @@ const Cast = {
       }
     });
 
-    // Mouse wheel scrolling
+    // Trackpad scroll wheel to TV D-Pad / scroll
     target.addEventListener('wheel', (e) => {
       e.preventDefault();
-      if (e.deltaY > 20) {
+      if (e.deltaY > 24) {
         Remote.sendKey('DPAD_DOWN', 20);
-      } else if (e.deltaY < -20) {
+      } else if (e.deltaY < -24) {
         Remote.sendKey('DPAD_UP', 19);
       }
     }, { passive: false });
   },
 
   sendTap(x, y) {
-    console.log(`[Cast] Tap at (${x}, ${y})`);
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({ action: 'tap', x, y }));
     } else {
@@ -270,7 +295,6 @@ const Cast = {
   },
 
   sendSwipe(x1, y1, x2, y2, duration) {
-    console.log(`[Cast] Swipe from (${x1}, ${y1}) to (${x2}, ${y2}) in ${duration}ms`);
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({ action: 'swipe', x1, y1, x2, y2, duration }));
     } else {
@@ -294,10 +318,10 @@ const Cast = {
   updateStatus(text, state = 'offline') {
     if (this.statusEl) {
       this.statusEl.innerText = text;
-      const dot = document.getElementById('cast-status-dot');
-      if (dot) {
-        dot.className = `status-dot ${state === 'online' ? 'status-online' : 'status-offline'}`;
-      }
+    }
+    const dot = document.getElementById('cast-status-dot');
+    if (dot) {
+      dot.className = `status-indicator-dot ${state === 'online' ? 'online' : 'offline'}`;
     }
   }
 };

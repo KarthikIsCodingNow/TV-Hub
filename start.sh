@@ -36,3 +36,4 @@ fi
 
 # Start server
 node server.js
+

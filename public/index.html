@@ -2,572 +2,1061 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TV-HUB // BAUHAUS CONTROLLER</title>
-  <link rel="stylesheet" href="/css/bauhaus.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#F2F2F7">
+  <title>TV-Hub — Android TV Companion</title>
+  <link rel="stylesheet" href="/css/style.css">
   <script src="/vendor/jmuxer.min.js"></script>
 </head>
-<body data-theme="classic">
+<body data-theme="system" data-accent="blue">
 
-  <!-- =======================================================================
-       TOP CONSTRUCTIVIST HEADER & BRANDING
-       ======================================================================= -->
-  <header class="block-header">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-      
-      <!-- Brand Composition -->
-      <div style="display: flex; align-items: center; gap: 1.25rem;">
-        <div class="brand-emblem">
-          <div class="emblem-circle"></div>
-          <div class="emblem-square"></div>
-          <div class="emblem-triangle"></div>
-        </div>
-        <div>
-          <h1 class="text-massive" style="line-height: 0.85; margin: 0;">TV-HUB</h1>
-          <div class="text-label" style="color: var(--bh-red); margin-top: 0.25rem;">
-            [ FORM FOLLOWS FUNCTION &bull; ANDROID TV CONTROLLER ]
-          </div>
-        </div>
-      </div>
-
-      <!-- TV Device Status Pill -->
-      <div style="display: flex; align-items: center; gap: 1rem;">
-        <div id="device-status-badge" class="bh-pill block-white">
-          <span id="header-status-dot" class="status-dot status-offline"></span>
-          <span id="device-model-name">CONNECTING...</span>
-          <span style="color: #666;">|</span>
-          <span id="device-ip-display">192.168.0.108:5555</span>
-        </div>
-
-        <button class="bh-btn bh-btn-yellow bh-btn-pill" onclick="App.switchTab('discovery')" style="padding: 0.4rem 1rem; font-size: 0.85rem;">
-          TVS ON NETWORK
-        </button>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- =======================================================================
-       SOLID COLOR-BLOCKED NAVIGATION
-       ======================================================================= -->
-  <nav class="bh-nav">
-    <div class="bh-nav-item active" data-tab="remote">
-      <span class="shape-triangle" style="border-bottom-color: var(--bh-yellow); margin-bottom: 2px;"></span>
-      REMOTE CONTROL
-    </div>
-    <div class="bh-nav-item" data-tab="cast">
-      <div style="width: 14px; height: 14px; background: var(--bh-blue); border: 2px solid var(--bh-black);"></div>
-      CAST & TRACKPAD
-    </div>
-    <div class="bh-nav-item" data-tab="text">
-      <div style="width: 14px; height: 14px; background: var(--bh-red); border-radius: 9999px !important; border: 2px solid var(--bh-black);"></div>
-      TEXT & CLIPBOARD
-    </div>
-    <div class="bh-nav-item" data-tab="files">
-      <span class="shape-triangle" style="border-bottom-color: #FFFFFF;"></span>
-      FILE SENDER
-    </div>
-    <div class="bh-nav-item" data-tab="apps">
-      <div style="width: 14px; height: 14px; background: var(--bh-yellow); border: 2px solid var(--bh-black);"></div>
-      APPS & ADBLOCK TV BRO
-    </div>
-    <div class="bh-nav-item" data-tab="shortcuts">
-      <div style="width: 14px; height: 14px; background: var(--bh-blue); border-radius: 9999px !important; border: 2px solid var(--bh-black);"></div>
-      WEBSITE SHORTCUTS
-    </div>
-    <div class="bh-nav-item" data-tab="discovery">
-      <div style="width: 14px; height: 14px; background: #FFFFFF; border: 2px solid var(--bh-black);"></div>
-      NETWORK SCANNER
-    </div>
-    <div class="bh-nav-item" data-tab="themes">
-      <span style="font-size: 1.1rem; line-height: 1;">&#9680;</span>
-      THEMES
-    </div>
-  </nav>
-
-  <!-- =======================================================================
-       MAIN WORKSPACE CONTAINER
-       ======================================================================= -->
-  <main class="container" style="flex: 1;">
+  <div class="app-layout">
 
     <!-- =====================================================================
-         TAB 1: TACTILE D-PAD REMOTE
+         DESKTOP / TABLET TRANSLUCENT SIDEBAR
          ===================================================================== -->
-    <section id="tab-remote" class="tab-content">
-      <div class="grid-cols-2">
-
-        <!-- D-Pad Constructivist Matrix -->
-        <div class="bh-card">
-          <div class="bh-card-header">
-            <h2 class="text-title">D-PAD MATRIX</h2>
-            <span class="bh-pill">KEYBOARD ACTIVE</span>
+    <aside class="app-sidebar">
+      
+      <div class="sidebar-header">
+        <div class="brand-container">
+          <div class="brand-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="15" rx="3" ry="3"></rect>
+              <polyline points="17 2 12 7 7 2"></polyline>
+            </svg>
           </div>
+          <div style="display: flex; flex-direction: column;">
+            <span class="brand-title">TV-Hub</span>
+            <span style="font-size: 11px; color: var(--text-tertiary);">iOS 18 Edition</span>
+          </div>
+        </div>
+        <span class="brand-version">v2.0</span>
+      </div>
 
-          <div class="remote-cluster">
+      <div class="sidebar-content">
+        
+        <!-- MAIN NAVIGATION -->
+        <div class="nav-group">
+          <div class="nav-group-title">Navigation</div>
+          <div class="nav-group-items">
             
-            <!-- Quick Power & Home Row -->
-            <div class="action-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 0.5rem;">
-              <button class="bh-btn bh-btn-red" data-key="POWER" title="Power Toggle">
-                POWER
-              </button>
-              <button class="bh-btn bh-btn-black" data-key="MUTE" title="Mute Audio">
-                MUTE
-              </button>
-              <button class="bh-btn bh-btn-blue" data-key="HOME" title="TV Home">
-                HOME
-              </button>
-              <button class="bh-btn bh-btn-yellow" data-key="BACK" title="Back / Return">
-                BACK
-              </button>
-            </div>
+            <a class="nav-item active" data-tab="overview">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+              </span>
+              <span>Overview</span>
+            </a>
 
-            <!-- 3x3 D-Pad Matrix -->
-            <div class="dpad-matrix">
-              <!-- Row 1 -->
-              <div style="background-color: var(--bh-black);"></div>
-              <button class="dpad-btn" data-key="DPAD_UP" title="Up Arrow">&#9650;</button>
-              <div style="background-color: var(--bh-black);"></div>
+            <a class="nav-item" data-tab="remote">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="4" ry="4"></rect>
+                  <circle cx="12" cy="8" r="2.5"></circle>
+                  <line x1="8" y1="14" x2="16" y2="14"></line>
+                  <line x1="8" y1="17" x2="16" y2="17"></line>
+                </svg>
+              </span>
+              <span>Remote Control</span>
+            </a>
 
-              <!-- Row 2 -->
-              <button class="dpad-btn" data-key="DPAD_LEFT" title="Left Arrow">&#9664;</button>
-              <button class="dpad-btn dpad-btn-center" data-key="OK" title="Enter / Select">OK</button>
-              <button class="dpad-btn" data-key="DPAD_RIGHT" title="Right Arrow">&#9654;</button>
+            <a class="nav-item" data-tab="cast">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path>
+                  <polygon points="12 15 17 21 7 21 12 15"></polygon>
+                </svg>
+              </span>
+              <span>Screen Mirror</span>
+            </a>
 
-              <!-- Row 3 -->
-              <div style="background-color: var(--bh-black);"></div>
-              <button class="dpad-btn" data-key="DPAD_DOWN" title="Down Arrow">&#9660;</button>
-              <div style="background-color: var(--bh-black);"></div>
-            </div>
-
-            <!-- Volume and Media Controls -->
-            <div class="action-grid" style="margin-top: 0.5rem;">
-              <button class="bh-btn bh-btn-black" data-key="VOLUME_UP">VOL +</button>
-              <button class="bh-btn bh-btn-black" data-key="VOLUME_DOWN">VOL -</button>
-              <button class="bh-btn bh-btn-yellow" data-key="MENU">MENU</button>
-              <button class="bh-btn bh-btn-blue" data-key="PLAY_PAUSE">PLAY/PAUSE</button>
-            </div>
+            <a class="nav-item" data-tab="text">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <line x1="6" y1="8" x2="6.01" y2="8"></line>
+                  <line x1="10" y1="8" x2="10.01" y2="8"></line>
+                  <line x1="14" y1="8" x2="14.01" y2="8"></line>
+                  <line x1="18" y1="8" x2="18.01" y2="8"></line>
+                  <line x1="7" y1="16" x2="17" y2="16"></line>
+                </svg>
+              </span>
+              <span>Text &amp; Clipboard</span>
+            </a>
 
           </div>
         </div>
 
-        <!-- Keyboard Guide & Quick Actions Card -->
-        <div>
-          <div class="bh-card block-black" style="color: #FFFFFF; margin-bottom: 1.5rem;">
-            <h2 class="text-title" style="margin-bottom: 1rem; color: var(--bh-yellow);">LAPTOP KEYBOARD CONTROL</h2>
-            <p style="font-weight: 600; margin-bottom: 1.25rem;">
-              You can control your TV directly using your laptop keyboard anywhere in this interface:
-            </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-weight: 800; font-size: 0.9rem;">
-              <div>&bull; &uarr; &darr; &larr; &rarr; : D-Pad Navigation</div>
-              <div>&bull; ENTER : Select / OK</div>
-              <div>&bull; ESC / BACKSPACE : Back</div>
-              <div>&bull; HOME KEY : TV Home</div>
-              <div>&bull; + / - : Volume Up / Down</div>
-              <div>&bull; M KEY : Mute Audio</div>
-              <div>&bull; SPACE : Play / Pause</div>
-              <div>&bull; TRACKPAD WHEEL : Scroll / DPAD</div>
-            </div>
-          </div>
+        <!-- MANAGEMENT & CONTENT -->
+        <div class="nav-group">
+          <div class="nav-group-title">Tools &amp; Media</div>
+          <div class="nav-group-items">
+            
+            <a class="nav-item" data-tab="files">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </span>
+              <span>File Sender</span>
+            </a>
 
-          <div class="bh-card">
-            <div class="bh-card-header">
-              <h3 style="font-size: 1.3rem;">QUICK TV COMMANDS</h3>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-              <button class="bh-btn bh-btn-yellow" onclick="Remote.sendKey('WAKEUP', 224)">WAKE TV UP</button>
-              <button class="bh-btn bh-btn-black" onclick="Remote.sendKey('SLEEP', 223)">PUT TV TO SLEEP</button>
-              <button class="bh-btn bh-btn-blue" onclick="App.switchTab('cast')">OPEN SCREEN CAST</button>
-              <button class="bh-btn bh-btn-red" onclick="App.switchTab('apps')">OPEN ADBLOCK BROWSER</button>
-            </div>
+            <a class="nav-item" data-tab="apps">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                </svg>
+              </span>
+              <span>Apps &amp; TV Bro</span>
+            </a>
+
+            <a class="nav-item" data-tab="shortcuts">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+              </span>
+              <span>Web Shortcuts</span>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- SYSTEM -->
+        <div class="nav-group">
+          <div class="nav-group-title">System</div>
+          <div class="nav-group-items">
+            
+            <a class="nav-item" data-tab="discovery">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+              </span>
+              <span>Network Scanner</span>
+            </a>
+
+            <a class="nav-item" data-tab="settings">
+              <span class="nav-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </span>
+              <span>Settings</span>
+            </a>
+
           </div>
         </div>
 
       </div>
-    </section>
 
-    <!-- =====================================================================
-         TAB 2: SCREEN CAST & TRACKPAD/MOUSE CONTROL
-         ===================================================================== -->
-    <section id="tab-cast" class="tab-content" style="display: none;">
-      <div class="bh-card">
-        <div class="bh-card-header">
-          <div>
-            <h2 class="text-title">TV SCREEN CAST &amp; TRACKPAD</h2>
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
-              <span id="cast-status-dot" class="status-dot status-offline"></span>
-              <span id="cast-status-text" style="font-weight: 800; font-size: 0.85rem;">INITIALIZING CAST...</span>
-            </div>
+      <!-- SIDEBAR FOOTER (DEVICE STATUS) -->
+      <div class="sidebar-footer">
+        <div class="device-quick-card">
+          <div class="device-info-preview">
+            <span id="sidebar-device-model" class="device-name-preview">Connecting...</span>
+            <span id="sidebar-device-ip" class="device-ip-preview tabular-nums">192.168.0.108:5555</span>
           </div>
-
-          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-            <button id="btn-toggle-cast" class="bh-btn bh-btn-red" onclick="Cast.toggleStream()">
-              STOP CASTING
-            </button>
-            <button class="bh-btn bh-btn-yellow" onclick="Cast.captureSingleSnapshot()">
-              REFRESH FRAME
-            </button>
-            <button class="bh-btn bh-btn-black" onclick="Cast.toggleFullscreen()">
-              FULLSCREEN
-            </button>
-          </div>
-        </div>
-
-        <!-- Interactive Screen Viewport -->
-        <div id="cast-viewport" class="cast-viewport-card">
-          <!-- Live H.264 Video Stream -->
-          <video id="cast-video" autoplay muted playsinline></video>
-          <!-- Fallback Canvas -->
-          <canvas id="cast-canvas" style="display: none;"></canvas>
-          <!-- Crosshair Touch/Tap Indicator -->
-          <div id="cast-indicator" class="cast-touch-indicator"></div>
-        </div>
-
-        <!-- Cast Instructions Bar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="font-weight: 800; font-size: 0.85rem; text-transform: uppercase;">
-            <span style="color: var(--bh-red);">&#9679; MOUSE CLICK:</span> Tap on TV &bull;
-            <span style="color: var(--bh-blue);">&#9679; CLICK &amp; DRAG:</span> Swipe Screen &bull;
-            <span style="color: var(--bh-yellow);">&#9679; KEYBOARD:</span> Full Remote Control
-          </div>
-          <div class="bh-pill">
-            TV RESOLUTION: <span id="cast-res-label">1280x720</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         TAB 3: TEXT & CLIPBOARD SENDER
-         ===================================================================== -->
-    <section id="tab-text" class="tab-content" style="display: none;">
-      <div class="grid-cols-2">
-
-        <div class="bh-card">
-          <div class="bh-card-header">
-            <h2 class="text-title">SEND TEXT TO TV</h2>
-            <span class="bh-pill">AUTO-TYPE</span>
-          </div>
-          <p style="font-weight: 700; margin-bottom: 1.25rem;">
-            Type anything on your laptop and send it directly into search boxes, password fields, or forms on your TV.
-          </p>
-
-          <div style="margin-bottom: 1.25rem;">
-            <input type="text" id="text-input-field" class="bh-input" placeholder="Type text or search query here..." autofocus>
-          </div>
-
-          <div style="display: flex; gap: 0.75rem;">
-            <button id="btn-send-text" class="bh-btn bh-btn-yellow" style="flex: 2;">
-              SEND TO TV (ENTER)
-            </button>
-            <button class="bh-btn bh-btn-black" onclick="document.getElementById('text-input-field').value = ''" style="flex: 1;">
-              CLEAR
-            </button>
-          </div>
-        </div>
-
-        <div class="bh-card block-blue">
-          <div class="bh-card-header" style="border-bottom-color: #FFFFFF;">
-            <h2 class="text-title" style="color: #FFFFFF;">LAPTOP CLIPBOARD</h2>
-            <span class="bh-pill block-white">1-CLICK PASTE</span>
-          </div>
-          <p style="font-weight: 600; margin-bottom: 1.5rem; color: #FFFFFF;">
-            Instantly sync your laptop clipboard. Useful for long URLs, Wi-Fi keys, complex credentials, and YouTube video links.
-          </p>
-
-          <button id="btn-paste-clipboard" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%;">
-            PASTE LAPTOP CLIPBOARD TO TV
+          <button class="topbar-btn topbar-btn-icon" onclick="App.checkStatus()" title="Refresh connection">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
           </button>
         </div>
-
       </div>
-    </section>
+
+    </aside>
 
     <!-- =====================================================================
-         TAB 4: FILE SENDER
+         MAIN VIEWPORT & TOPBAR
          ===================================================================== -->
-    <section id="tab-files" class="tab-content" style="display: none;">
-      <div class="bh-card">
-        <div class="bh-card-header">
-          <h2 class="text-title">FILE SENDER TO TV</h2>
-          <span class="bh-pill">TARGET: /sdcard/Download/</span>
-        </div>
-
-        <div id="file-dropzone" class="bh-dropzone">
-          <div class="brand-emblem" style="margin-bottom: 1rem;">
-            <div class="emblem-circle"></div>
-            <div class="emblem-square"></div>
-            <div class="emblem-triangle"></div>
-          </div>
-          <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">DRAG &amp; DROP FILES HERE</h3>
-          <p style="font-weight: 700; color: #666; margin-bottom: 1.25rem;">
-            Send videos, pictures, APKs, music, and documents directly to your TV storage.
-          </p>
-          <button class="bh-btn bh-btn-yellow" onclick="document.getElementById('file-input').click()">
-            BROWSE FILES ON LAPTOP
-          </button>
-          <input type="file" id="file-input" style="display: none;">
-        </div>
-
-        <div id="upload-progress-card" class="bh-card block-yellow" style="display: none; margin-top: 1.5rem; margin-bottom: 0;">
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div class="status-dot status-online"></div>
-            <span id="upload-progress-text" style="font-weight: 900; font-size: 1.1rem;">UPLOADING...</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         TAB 5: APPS & TOP-RATED ADBLOCK TV BROWSER
-         ===================================================================== -->
-    <section id="tab-apps" class="tab-content" style="display: none;">
+    <div class="app-main">
       
-      <!-- HERO: TV BRO TOP-RATED ADBLOCK BROWSER -->
-      <div class="bh-card block-red" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <div class="bh-pill block-white" style="margin-bottom: 0.75rem;">
-              RECOMMENDED #1 TV APP
-            </div>
-            <h2 class="text-title" style="color: #FFFFFF; font-size: 2.5rem; margin-bottom: 0.5rem;">
-              TOP-RATED ADBLOCK TV BROWSER: TV BRO
-            </h2>
-            <p style="font-weight: 600; max-width: 750px; color: #FFF;">
-              TV Bro is the highest-rated open-source web browser built specifically for Android TV remotes.
-              Features a built-in adblocker, smooth cursor navigation, hardware video player, and zero tracking.
-            </p>
-          </div>
-
-          <div>
-            <button id="btn-install-tvbro" class="bh-btn bh-btn-lg bh-btn-yellow" style="margin-top: 0.5rem;">
-              &#9889; 1-CLICK INSTALL TV BRO
-            </button>
-          </div>
-        </div>
-
-        <div id="tvbro-install-status" style="margin-top: 1rem; font-weight: 900; display: none; background: #000; padding: 0.75rem 1rem;">
-          DOWNLOADING &amp; SIDELOADING...
-        </div>
-      </div>
-
-      <!-- Sideload Custom APK -->
-      <div class="bh-card" style="margin-bottom: 2rem;">
-        <div class="bh-card-header">
-          <h3 class="text-title" style="font-size: 1.8rem;">SIDELOAD ANY APK TO TV</h3>
-          <span class="bh-pill">ADB INSTALL -R</span>
-        </div>
-        <div id="apk-dropzone" class="bh-dropzone" style="padding: 2rem;">
-          <h4 style="font-size: 1.4rem; margin-bottom: 0.5rem;">DRAG &amp; DROP .APK FILE HERE</h4>
-          <p style="font-weight: 700; color: #666; margin-bottom: 1rem;">Directly installs any app onto your Android TV.</p>
-          <button class="bh-btn bh-btn-blue">SELECT APK FROM LAPTOP</button>
-          <input type="file" id="apk-input" accept=".apk" style="display: none;">
-        </div>
-      </div>
-
-      <!-- Installed Apps List & Deletion -->
-      <div class="bh-card">
-        <div class="bh-card-header">
-          <h3 class="text-title" style="font-size: 1.8rem;">INSTALLED APPS (MANAGE &amp; DELETE)</h3>
-          <button id="btn-refresh-apps" class="bh-btn bh-btn-yellow" style="padding: 0.4rem 1rem;">REFRESH LIST</button>
-        </div>
-        <div id="installed-apps-grid">
-          <div style="padding: 1.5rem; font-weight: 800;">CLICK REFRESH TO VIEW INSTALLED APPS...</div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- =====================================================================
-         TAB 6: WEBSITE SHORTCUTS
-         ===================================================================== -->
-    <section id="tab-shortcuts" class="tab-content" style="display: none;">
-      
-      <!-- Preset Popular Shortcuts -->
-      <div class="bh-card" style="margin-bottom: 2rem;">
-        <div class="bh-card-header">
-          <h2 class="text-title">POPULAR TV WEBSITES</h2>
-          <span class="bh-pill">1-CLICK LAUNCH</span>
-        </div>
-        <div class="grid-cols-3">
-          <div class="bh-card block-red" style="padding: 1.25rem;">
-            <h3 style="font-size: 1.6rem; color: #FFF; margin-bottom: 0.5rem;">YOUTUBE</h3>
-            <p style="font-weight: 600; color: #FFF; margin-bottom: 1rem; font-size: 0.85rem;">Ad-free web portal in TV Bro</p>
-            <button class="bh-btn bh-btn-yellow" onclick="App.launchUrl('https://youtube.com')" style="width: 100%;">OPEN ON TV</button>
-          </div>
-
-          <div class="bh-card block-blue" style="padding: 1.25rem;">
-            <h3 style="font-size: 1.6rem; color: #FFF; margin-bottom: 0.5rem;">TWITCH TV</h3>
-            <p style="font-weight: 600; color: #FFF; margin-bottom: 1rem; font-size: 0.85rem;">Live streaming channels</p>
-            <button class="bh-btn bh-btn-yellow" onclick="App.launchUrl('https://twitch.tv')" style="width: 100%;">OPEN ON TV</button>
-          </div>
-
-          <div class="bh-card block-yellow" style="padding: 1.25rem;">
-            <h3 style="font-size: 1.6rem; margin-bottom: 0.5rem;">REDDIT</h3>
-            <p style="font-weight: 600; margin-bottom: 1rem; font-size: 0.85rem;">Browse media &amp; communities</p>
-            <button class="bh-btn bh-btn-black" onclick="App.launchUrl('https://reddit.com')" style="width: 100%;">OPEN ON TV</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Add Custom Website Shortcut -->
-      <div class="bh-card">
-        <div class="bh-card-header">
-          <h2 class="text-title">ADD CUSTOM WEBSITE SHORTCUT</h2>
-        </div>
-        <form id="form-add-shortcut" style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 1rem; margin-bottom: 1.5rem;">
-          <input type="text" id="input-shortcut-name" class="bh-input" placeholder="Shortcut Name (e.g. Plex)" required>
-          <input type="url" id="input-shortcut-url" class="bh-input" placeholder="https://..." required>
-          <button type="submit" class="bh-btn bh-btn-yellow">ADD SHORTCUT</button>
-        </form>
-
-        <div id="custom-shortcuts-grid" class="grid-cols-3">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-
-    </section>
-
-    <!-- =====================================================================
-         TAB 7: NETWORK TV DISCOVERY
-         ===================================================================== -->
-    <section id="tab-discovery" class="tab-content" style="display: none;">
-      <div class="grid-cols-2">
-
-        <!-- Auto-Detection -->
-        <div class="bh-card">
-          <div class="bh-card-header">
-            <h2 class="text-title">AUTO-DETECT TVS ON NETWORK</h2>
-            <span class="bh-pill">SUBNET SCANNER</span>
-          </div>
-          <p style="font-weight: 700; margin-bottom: 1.25rem;">
-            Scans your local Wi-Fi / Ethernet network on port 5555 and ADB mDNS to automatically detect all Android TVs.
-          </p>
-          <button id="btn-auto-discover" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%; margin-bottom: 1.5rem;">
-            &#128269; SCAN NETWORK FOR TVS
+      <!-- TOP APPLICATION BAR -->
+      <header class="app-topbar">
+        
+        <div class="topbar-left">
+          <button id="btn-toggle-sidebar" class="topbar-btn topbar-btn-icon" style="display: none;" title="Toggle Sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </button>
-          <div id="discovery-status-text" style="font-weight: 900; margin-bottom: 1rem; text-transform: uppercase;">
-            READY TO SCAN
-          </div>
-          <div id="discovered-tvs-list">
-            <!-- Discovered TVs populated here -->
-          </div>
-        </div>
-
-        <!-- Manual IP Connection -->
-        <div class="bh-card block-black" style="color: #FFFFFF;">
-          <div class="bh-card-header" style="border-bottom-color: #FFFFFF;">
-            <h2 class="text-title" style="color: var(--bh-yellow);">MANUAL TV CONNECTION</h2>
-            <span class="bh-pill block-white">DIRECT IP</span>
-          </div>
-          <p style="font-weight: 600; margin-bottom: 1.25rem;">
-            Connect directly to your TV's IP address (pre-configured for your TV at 192.168.0.108).
-          </p>
-
-          <div style="margin-bottom: 1rem;">
-            <label class="text-label" style="display: block; margin-bottom: 0.5rem; color: #FFF;">TV IP ADDRESS</label>
-            <input type="text" id="input-manual-ip" class="bh-input" value="192.168.0.108">
-          </div>
-
-          <div style="margin-bottom: 1.5rem;">
-            <label class="text-label" style="display: block; margin-bottom: 0.5rem; color: #FFF;">PORT</label>
-            <input type="number" id="input-manual-port" class="bh-input" value="5555">
-          </div>
-
-          <button id="btn-manual-connect" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%;">
-            CONNECT TO TV
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         TAB 8: BAUHAUS THEMES
-         ===================================================================== -->
-    <section id="tab-themes" class="tab-content" style="display: none;">
-      <div class="bh-card">
-        <div class="bh-card-header">
-          <h2 class="text-title">BAUHAUS THEME PALETTES</h2>
-          <span class="bh-pill">FORM FOLLOWS FUNCTION</span>
-        </div>
-        <p style="font-weight: 700; margin-bottom: 1.5rem;">
-          Select a Constructivist or Modernist theme composition for TV-Hub:
-        </p>
-
-        <div class="grid-cols-2">
           
-          <div class="bh-card" style="padding: 1.5rem;">
-            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">CLASSIC BAUHAUS (ORIGINAL)</h3>
-            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Stark Black, Off-White, Primary Red, Blue, and Yellow.</p>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-              <div style="width: 32px; height: 32px; background: #D02020; border: 3px solid #121212;"></div>
-              <div style="width: 32px; height: 32px; background: #1040C0; border: 3px solid #121212;"></div>
-              <div style="width: 32px; height: 32px; background: #F0C020; border: 3px solid #121212;"></div>
-              <div style="width: 32px; height: 32px; background: #121212; border: 3px solid #121212;"></div>
-            </div>
-            <button class="bh-btn bh-btn-yellow" data-set-theme="classic" style="width: 100%;">APPLY CLASSIC</button>
+          <div class="page-title-container">
+            <h1 id="topbar-page-title" class="page-title">Overview</h1>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          
+          <!-- Command Palette Trigger -->
+          <button id="btn-command-palette-trigger" class="topbar-btn" title="Open Command Palette (⌘K)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span style="font-size: 11px; opacity: 0.8;">⌘K</span>
+          </button>
+
+          <!-- TV Connection Status Badge -->
+          <div class="connection-badge" onclick="App.switchTab('discovery')" style="cursor: pointer;" title="Active TV Connection">
+            <span id="header-status-dot" class="status-indicator-dot offline"></span>
+            <span id="header-device-model" style="font-weight: 600;">MiTV-AXSO0</span>
+            <span style="opacity: 0.4;">|</span>
+            <span id="header-device-ip" class="tabular-nums" style="font-size: 11px; color: var(--text-secondary);">192.168.0.108</span>
           </div>
 
-          <div class="bh-card" style="padding: 1.5rem;">
-            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">DE STIJL / MONDRIAN</h3>
-            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Deep Vermilion, Cobalt, Canary Yellow, Cream Base.</p>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-              <div style="width: 32px; height: 32px; background: #BD1E1E; border: 3px solid #0A0A0A;"></div>
-              <div style="width: 32px; height: 32px; background: #0E2F9E; border: 3px solid #0A0A0A;"></div>
-              <div style="width: 32px; height: 32px; background: #FAD02C; border: 3px solid #0A0A0A;"></div>
-              <div style="width: 32px; height: 32px; background: #0A0A0A; border: 3px solid #0A0A0A;"></div>
-            </div>
-            <button class="bh-btn bh-btn-blue" data-set-theme="mondrian" style="width: 100%;">APPLY MONDRIAN</button>
-          </div>
-
-          <div class="bh-card" style="padding: 1.5rem;">
-            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">CONSTRUCTIVIST</h3>
-            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Soviet Constructivism: Ochre, Industrial Red, Warm White.</p>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-              <div style="width: 32px; height: 32px; background: #D32F2F; border: 3px solid #1A1A1A;"></div>
-              <div style="width: 32px; height: 32px; background: #1976D2; border: 3px solid #1A1A1A;"></div>
-              <div style="width: 32px; height: 32px; background: #FFA000; border: 3px solid #1A1A1A;"></div>
-              <div style="width: 32px; height: 32px; background: #1A1A1A; border: 3px solid #1A1A1A;"></div>
-            </div>
-            <button class="bh-btn bh-btn-red" data-set-theme="constructivist" style="width: 100%;">APPLY CONSTRUCTIVIST</button>
-          </div>
-
-          <div class="bh-card" style="padding: 1.5rem;">
-            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">MONOLITH MONOCHROME</h3>
-            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Pure high-contrast Stark Black and Bright White geometry.</p>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
-              <div style="width: 32px; height: 32px; background: #000000; border: 3px solid #000000;"></div>
-              <div style="width: 32px; height: 32px; background: #333333; border: 3px solid #000000;"></div>
-              <div style="width: 32px; height: 32px; background: #888888; border: 3px solid #000000;"></div>
-              <div style="width: 32px; height: 32px; background: #FFFFFF; border: 3px solid #000000;"></div>
-            </div>
-            <button class="bh-btn bh-btn-black" data-set-theme="monolith" style="width: 100%;">APPLY MONOLITH</button>
-          </div>
+          <!-- Shortcuts help -->
+          <button class="topbar-btn topbar-btn-icon" onclick="App.openKeyboardShortcutsModal()" title="Keyboard Shortcuts (?)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </button>
 
         </div>
-      </div>
-    </section>
 
-  </main>
+      </header>
+
+      <!-- SCROLLABLE CONTENT VIEWPORT -->
+      <main class="main-viewport">
+        <div class="content-container">
+
+          <!-- =================================================================
+               TAB 1: OVERVIEW DASHBOARD (PRIMARY LANDING SCREEN)
+               ================================================================= -->
+          <section id="tab-overview" class="tab-content">
+            
+            <!-- Active TV Hero Card -->
+            <div class="overview-hero-card">
+              <div class="hero-tv-preview">
+                <div class="hero-tv-icon-wrapper">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="15" rx="3" ry="3"></rect>
+                    <polyline points="17 2 12 7 7 2"></polyline>
+                  </svg>
+                </div>
+                <div class="hero-tv-meta">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h2 id="hero-tv-model" class="headline-medium">MiTV-AXSO0</h2>
+                    <div style="display: flex; align-items: center; gap: 5px;" class="meta-pill">
+                      <span id="hero-tv-status" class="status-indicator-dot online"></span>
+                      <span style="font-size: 11px; font-weight: 600;">Online</span>
+                    </div>
+                  </div>
+                  <div style="font-size: 13px; color: var(--text-secondary);">
+                    Target: <span id="hero-tv-ip" class="tabular-nums" style="font-weight: 600;">192.168.0.108:5555</span>
+                  </div>
+                  <div class="hero-badges-row">
+                    <span id="hero-tv-os" class="meta-pill">Android 9</span>
+                    <span id="hero-tv-res" class="meta-pill">1280x720</span>
+                    <span class="meta-pill">Wi-Fi ADB</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero-actions">
+                <button class="ios-btn ios-btn-primary" onclick="App.switchTab('remote')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="4"></rect><circle cx="12" cy="8" r="2.5"></circle></svg>
+                  Open Remote
+                </button>
+                <button id="btn-hero-cast" class="ios-btn ios-btn-secondary" onclick="App.switchTab('cast'); Cast.startStream();">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  Start Mirror
+                </button>
+                <button class="ios-btn ios-btn-secondary" onclick="Remote.sendKey('WAKEUP', 224)" title="Wake TV">
+                  Wake
+                </button>
+                <button class="ios-btn ios-btn-secondary" onclick="Remote.sendKey('SLEEP', 223)" title="Sleep TV">
+                  Sleep
+                </button>
+              </div>
+            </div>
+
+            <!-- Dashboard 2-Column Grid -->
+            <div class="dashboard-grid">
+              
+              <!-- Left Column: Quick Actions & Sessions -->
+              <div style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <!-- Quick Actions Grid -->
+                <div>
+                  <h3 class="headline-small" style="margin-bottom: 12px;">Quick Actions</h3>
+                  <div class="quick-actions-grid">
+                    
+                    <div class="quick-action-tile tile-blue" onclick="App.launchUrl('https://youtube.com')">
+                      <div class="quick-action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                      </div>
+                      <span class="quick-action-label">YouTube</span>
+                    </div>
+
+                    <div class="quick-action-tile tile-green" onclick="document.getElementById('btn-paste-clipboard')?.click()">
+                      <div class="quick-action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                      </div>
+                      <span class="quick-action-label">Send Clip</span>
+                    </div>
+
+                    <div class="quick-action-tile tile-purple" onclick="App.switchTab('apps')">
+                      <div class="quick-action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      </div>
+                      <span class="quick-action-label">TV Bro</span>
+                    </div>
+
+                    <div class="quick-action-tile tile-orange" onclick="App.switchTab('files')">
+                      <div class="quick-action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                      </div>
+                      <span class="quick-action-label">Send File</span>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Recent Activity Feed -->
+                <div class="ios-card">
+                  <div class="ios-card-header">
+                    <span class="ios-card-title">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      Recent Activity
+                    </span>
+                    <button class="ios-btn ios-btn-sm ios-btn-secondary" onclick="App.clearActivityLog()">Clear</button>
+                  </div>
+                  <div id="recent-activity-list">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Right Column: Interactive Remote Mini-Widget -->
+              <div>
+                <div class="ios-card" style="display: flex; flex-direction: column; align-items: center; padding: 24px;">
+                  <div class="ios-card-header" style="width: 100%;">
+                    <span class="ios-card-title">Quick Remote</span>
+                    <button class="ios-btn ios-btn-tinted ios-btn-sm" onclick="App.switchTab('remote')">Full Remote</button>
+                  </div>
+
+                  <!-- Mini D-Pad -->
+                  <div class="apple-dpad-circle" style="width: 190px; height: 190px; margin: 12px 0;">
+                    <button class="dpad-dir-btn dpad-btn-up" data-key="DPAD_UP" style="left: 68px; top: 6px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    </button>
+                    <button class="dpad-dir-btn dpad-btn-left" data-key="DPAD_LEFT" style="top: 68px; left: 6px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="dpad-center-btn" data-key="OK" style="width: 74px; height: 74px;">OK</button>
+                    <button class="dpad-dir-btn dpad-btn-right" data-key="DPAD_RIGHT" style="top: 68px; right: 6px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <button class="dpad-dir-btn dpad-btn-down" data-key="DPAD_DOWN" style="left: 68px; bottom: 6px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                  </div>
+
+                  <!-- Mini Actions Row -->
+                  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; margin-top: 8px;">
+                    <button class="ios-btn ios-btn-secondary ios-btn-sm" data-key="BACK">Back</button>
+                    <button class="ios-btn ios-btn-secondary ios-btn-sm" data-key="HOME">Home</button>
+                    <button class="ios-btn ios-btn-secondary ios-btn-sm" data-key="VOLUME_UP">Vol +</button>
+                    <button class="ios-btn ios-btn-secondary ios-btn-sm" data-key="VOLUME_DOWN">Vol -</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 2: APPLE TV-INSPIRED REMOTE CONTROL
+               ================================================================= -->
+          <section id="tab-remote" class="tab-content" style="display: none;">
+            
+            <div class="remote-layout-container">
+              
+              <!-- Primary Column: Apple TV-Inspired Siri Remote Device -->
+              <div class="remote-device-card">
+                
+                <!-- Power & Top Row -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 8px;">
+                  <button class="topbar-btn topbar-btn-icon" data-key="POWER" title="Power Toggle" style="color: var(--danger);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+                  </button>
+                  <span class="meta-pill" style="font-size: 11px;">Keyboard Ready</span>
+                  <button class="topbar-btn topbar-btn-icon" data-key="MUTE" title="Mute Audio">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                  </button>
+                </div>
+
+                <!-- Circular Directional Control Surface -->
+                <div class="apple-dpad-circle">
+                  <button class="dpad-dir-btn dpad-btn-up" data-key="DPAD_UP" title="Up Arrow">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                  </button>
+                  <button class="dpad-dir-btn dpad-btn-left" data-key="DPAD_LEFT" title="Left Arrow">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button class="dpad-center-btn" data-key="OK" title="Select / OK">
+                    OK
+                  </button>
+                  <button class="dpad-dir-btn dpad-btn-right" data-key="DPAD_RIGHT" title="Right Arrow">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                  <button class="dpad-dir-btn dpad-btn-down" data-key="DPAD_DOWN" title="Down Arrow">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </div>
+
+                <!-- Navigation & Media Cluster -->
+                <div class="remote-buttons-row">
+                  
+                  <button class="remote-round-btn" data-key="BACK" title="Back">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <span>Back</span>
+                  </button>
+
+                  <button class="remote-round-btn" data-key="HOME" title="TV Home">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="3"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                    <span>Home</span>
+                  </button>
+
+                  <button class="remote-round-btn" data-key="MENU" title="TV Menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <span>Menu</span>
+                  </button>
+
+                </div>
+
+                <!-- Play/Pause & Volume Rocker Slider Row -->
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 12px;">
+                  
+                  <button class="remote-round-btn" data-key="PLAY_PAUSE" style="width: 60px; height: 60px;" title="Play / Pause">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </button>
+
+                  <!-- Siri Remote Volume Rocker -->
+                  <div class="volume-rocker-pill" title="Volume Up / Down">
+                    <button class="volume-btn" data-key="VOLUME_UP" title="Volume +">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                    <button class="volume-btn" data-key="VOLUME_DOWN" title="Volume -">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- Secondary Column: Laptop Keyboard Forwarding & Quick Commands -->
+              <div style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <div class="ios-card">
+                  <div class="ios-card-header">
+                    <span class="ios-card-title">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="6" y1="8" x2="6.01" y2="8"></line><line x1="10" y1="8" x2="10.01" y2="8"></line><line x1="14" y1="8" x2="14.01" y2="8"></line><line x1="18" y1="8" x2="18.01" y2="8"></line><line x1="7" y1="16" x2="17" y2="16"></line></svg>
+                      Laptop Keyboard Controls
+                    </span>
+                    <span class="meta-pill">Always Active</span>
+                  </div>
+                  <p class="text-subhead" style="margin-bottom: 16px;">
+                    Control your TV naturally from your keyboard when you are not typing in a text field:
+                  </p>
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">↑ ↓ ← →</kbd>
+                      <span style="font-size: 13px;">D-Pad Movement</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">Enter</kbd>
+                      <span style="font-size: 13px;">Select / OK</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">Esc / ⌫</kbd>
+                      <span style="font-size: 13px;">Back</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">Home</kbd>
+                      <span style="font-size: 13px;">TV Home</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">+ / -</kbd>
+                      <span style="font-size: 13px;">Volume Up / Down</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">M</kbd>
+                      <span style="font-size: 13px;">Mute Audio</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">Space</kbd>
+                      <span style="font-size: 13px;">Play / Pause</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="meta-pill" style="font-weight: 700;">Wheel</kbd>
+                      <span style="font-size: 13px;">Trackpad Scroll</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ios-card">
+                  <div class="ios-card-header">
+                    <span class="ios-card-title">Quick TV Actions</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="ios-btn ios-btn-secondary" onclick="Remote.sendKey('WAKEUP', 224)">Wake Screen</button>
+                    <button class="ios-btn ios-btn-secondary" onclick="Remote.sendKey('SLEEP', 223)">Put to Sleep</button>
+                    <button class="ios-btn ios-btn-tinted" onclick="App.switchTab('cast'); Cast.startStream();">Open Mirror View</button>
+                    <button class="ios-btn ios-btn-tinted" onclick="App.switchTab('apps')">Open TV Bro</button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 3: CAST SCREEN & TRACKPAD WORKSPACE
+               ================================================================= -->
+          <section id="tab-cast" class="tab-content" style="display: none;">
+            
+            <div class="cast-workspace">
+              
+              <div class="cast-toolbar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span id="cast-status-dot" class="status-indicator-dot offline"></span>
+                  <span id="cast-status-text" style="font-weight: 600; font-size: 13px;">Connecting Stream...</span>
+                  <span style="opacity: 0.3;">|</span>
+                  <span class="meta-pill" style="font-size: 11px;">Resolution: <span id="cast-res-label">1280x720</span></span>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button id="btn-toggle-cast" class="ios-btn ios-btn-primary" onclick="Cast.toggleStream()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Start Mirroring
+                  </button>
+                  <button class="ios-btn ios-btn-secondary" onclick="Cast.captureSingleSnapshot()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    Refresh Frame
+                  </button>
+                  <button class="ios-btn ios-btn-secondary" onclick="Cast.toggleFullscreen()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    Fullscreen
+                  </button>
+                </div>
+              </div>
+
+              <!-- High-Resolution Viewport -->
+              <div id="cast-viewport" class="cast-viewport-frame">
+                <video id="cast-video" autoplay muted playsinline></video>
+                <canvas id="cast-canvas" style="display: none;"></canvas>
+                <div id="cast-indicator" class="cast-touch-indicator"></div>
+              </div>
+
+              <!-- Trackpad Instructions Footer -->
+              <div class="ios-card" style="padding: 14px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--text-secondary);">
+                  <div>
+                    <strong style="color: var(--text-primary);">Click:</strong> Tap Screen &bull;
+                    <strong style="color: var(--text-primary); margin-left: 8px;">Drag:</strong> Swipe Lists &bull;
+                    <strong style="color: var(--text-primary); margin-left: 8px;">Wheel:</strong> Scroll Feed
+                  </div>
+                  <div style="font-size: 12px;">
+                    Ultra-low latency H.264 binary WebSocket stream
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 4: TEXT & CLIPBOARD
+               ================================================================= -->
+          <section id="tab-text" class="tab-content" style="display: none;">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              
+              <!-- Direct Keyboard Typing -->
+              <div class="ios-card">
+                <div class="ios-card-header">
+                  <span class="ios-card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+                    Send Text to TV
+                  </span>
+                  <span id="text-char-count" class="meta-pill">0 characters</span>
+                </div>
+                <p class="text-subhead" style="margin-bottom: 16px;">
+                  Type search queries, credentials, or URLs on your laptop and send them directly into the active field on your TV.
+                </p>
+
+                <div class="ios-input-group" style="margin-bottom: 16px;">
+                  <input type="text" id="text-input-field" class="ios-input" placeholder="Type text or search query here..." autofocus>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                  <button id="btn-send-text" class="ios-btn ios-btn-primary" style="flex: 1;">
+                    Send to TV (Enter)
+                  </button>
+                  <button class="ios-btn ios-btn-secondary" onclick="document.getElementById('text-input-field').value = ''; document.getElementById('text-char-count').innerText = '0 characters';">
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <!-- 1-Click Clipboard Sync -->
+              <div class="ios-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="ios-card-header">
+                    <span class="ios-card-title">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                      Laptop Clipboard Sync
+                    </span>
+                    <span class="meta-pill">1-Click</span>
+                  </div>
+                  <p class="text-subhead" style="margin-bottom: 20px;">
+                    Instantly paste whatever is currently copied on your laptop clipboard into the focused TV text input.
+                  </p>
+                </div>
+
+                <button id="btn-paste-clipboard" class="ios-btn ios-btn-lg ios-btn-primary" style="width: 100%;">
+                  Paste Laptop Clipboard to TV
+                </button>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 5: FILE SENDER (AIRDROP STYLE)
+               ================================================================= -->
+          <section id="tab-files" class="tab-content" style="display: none;">
+            
+            <div class="ios-card">
+              <div class="ios-card-header">
+                <span class="ios-card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                  AirDrop File Transfer
+                </span>
+                <span class="meta-pill">Target: /sdcard/Download/</span>
+              </div>
+
+              <!-- Dropzone -->
+              <div id="file-dropzone" class="ios-dropzone">
+                <div class="dropzone-icon-circle">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </div>
+                <div>
+                  <h3 class="headline-small" style="margin-bottom: 4px;">Drag &amp; Drop Files to Send to TV</h3>
+                  <p class="text-subhead">Supports videos, music, photos, APKs, and documents.</p>
+                </div>
+                <button class="ios-btn ios-btn-secondary" onclick="document.getElementById('file-input').click()">
+                  Browse Files on Laptop
+                </button>
+                <input type="file" id="file-input" style="display: none;">
+              </div>
+
+              <!-- Progress Card -->
+              <div id="upload-progress-card" class="ios-card" style="display: none; margin-top: 16px; background: var(--surface-secondary);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span id="upload-filename" style="font-weight: 600; font-size: 13.5px;">Uploading file...</span>
+                  <span id="upload-status-text" class="text-caption">Pushing to TV...</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div id="upload-progress-bar" class="progress-bar-fill indeterminate"></div>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 6: APPS & TV BRO (APP STORE STYLE)
+               ================================================================= -->
+          <section id="tab-apps" class="tab-content" style="display: none;">
+            
+            <!-- Featured App Hero: TV Bro -->
+            <div class="tvbro-hero-card" style="margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 18px;">
+                <div style="width: 60px; height: 60px; border-radius: var(--radius-md); background: #007AFF; display: flex; align-items: center; justify-content: center; color: #FFF; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <span class="app-store-badge">Recommended</span>
+                    <h3 class="headline-medium">TV Bro — Top-Rated Adblock Browser</h3>
+                  </div>
+                  <p class="text-subhead" style="max-width: 650px;">
+                    The premier open-source web browser for Android TV. Built-in adblocker, smooth cursor navigation, Gecko engine, and download manager.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <button id="btn-install-tvbro" class="ios-btn ios-btn-primary ios-btn-lg">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Install TV Bro
+                </button>
+              </div>
+            </div>
+            
+            <div id="tvbro-install-status" class="meta-pill" style="display: none; margin-bottom: 20px; padding: 10px 16px; font-size: 13px;">
+              Streaming installation to TV...
+            </div>
+
+            <!-- APK Sideload Dropzone -->
+            <div class="ios-card" style="margin-bottom: 20px;">
+              <div class="ios-card-header">
+                <span class="ios-card-title">Sideload Any APK</span>
+                <span class="meta-pill">adb install -r</span>
+              </div>
+              <div id="apk-dropzone" class="ios-dropzone" style="padding: 24px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <div style="font-weight: 600; font-size: 14px;">Drag &amp; drop any .apk file to install on TV</div>
+                <input type="file" id="apk-input" accept=".apk" style="display: none;">
+              </div>
+            </div>
+
+            <!-- Installed Applications Grid -->
+            <div class="ios-card">
+              <div class="ios-card-header">
+                <span class="ios-card-title">Installed User Applications</span>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="input-search-apps" class="ios-input" placeholder="Search apps..." style="padding: 6px 12px; font-size: 12px; width: 180px;">
+                  <button id="btn-refresh-apps" class="ios-btn ios-btn-secondary ios-btn-sm">Refresh</button>
+                </div>
+              </div>
+              <div id="installed-apps-grid" class="installed-apps-grid">
+                <div style="padding: 24px; text-align: center; color: var(--text-secondary);">Loading packages...</div>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 7: WEBSITE SHORTCUTS (SAFARI FAVORITES)
+               ================================================================= -->
+          <section id="tab-shortcuts" class="tab-content" style="display: none;">
+            
+            <!-- Default Popular Favorites -->
+            <div class="ios-card" style="margin-bottom: 20px;">
+              <div class="ios-card-header">
+                <span class="ios-card-title">Popular Favorites</span>
+                <span class="meta-pill">1-Click Launch on TV</span>
+              </div>
+              <div class="shortcuts-grid">
+                
+                <div class="shortcut-tile" onclick="App.launchUrl('https://youtube.com')">
+                  <div class="shortcut-icon-circle" style="background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                  </div>
+                  <div style="font-weight: 600; font-size: 14px;">YouTube</div>
+                  <div style="font-size: 11px; color: var(--text-secondary);">Ad-Free Web Portal</div>
+                </div>
+
+                <div class="shortcut-tile" onclick="App.launchUrl('https://twitch.tv')">
+                  <div class="shortcut-icon-circle" style="background: linear-gradient(135deg, #9146FF 0%, #6441A5 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7"></path></svg>
+                  </div>
+                  <div style="font-weight: 600; font-size: 14px;">Twitch</div>
+                  <div style="font-size: 11px; color: var(--text-secondary);">Live Streams</div>
+                </div>
+
+                <div class="shortcut-tile" onclick="App.launchUrl('https://reddit.com')">
+                  <div class="shortcut-icon-circle" style="background: linear-gradient(135deg, #FF4500 0%, #D83A00 100%);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M14.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path></svg>
+                  </div>
+                  <div style="font-weight: 600; font-size: 14px;">Reddit</div>
+                  <div style="font-size: 11px; color: var(--text-secondary);">Communities</div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Custom User Shortcuts -->
+            <div class="ios-card">
+              <div class="ios-card-header">
+                <span class="ios-card-title">Custom Bookmarks</span>
+                <button class="ios-btn ios-btn-primary ios-btn-sm" onclick="App.openModal('modal-add-shortcut')">
+                  + Add Bookmark
+                </button>
+              </div>
+              <div id="custom-shortcuts-grid" class="shortcuts-grid">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 8: NETWORK SCANNER (AIRPLAY STYLE)
+               ================================================================= -->
+          <section id="tab-discovery" class="tab-content" style="display: none;">
+            
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+              
+              <!-- Discovered TVs on Local Network -->
+              <div class="ios-card">
+                <div class="ios-card-header">
+                  <span class="ios-card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                    Discovered TVs on Local Wi-Fi
+                  </span>
+                  <button id="btn-auto-discover" class="ios-btn ios-btn-primary ios-btn-sm">
+                    Scan Network for TVs
+                  </button>
+                </div>
+
+                <div id="discovery-status-text" class="text-subhead" style="margin-bottom: 16px;">
+                  Ready to scan subnet on port 5555.
+                </div>
+
+                <div id="discovered-tvs-list">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Manual IP / Port Connection -->
+              <div class="ios-card">
+                <div class="ios-card-header">
+                  <span class="ios-card-title">Manual Connection</span>
+                </div>
+                <p class="text-subhead" style="margin-bottom: 16px;">
+                  Connect directly to your TV's local IP address and ADB port.
+                </p>
+
+                <div class="ios-input-group" style="margin-bottom: 12px;">
+                  <label class="ios-input-label">TV IP Address</label>
+                  <input type="text" id="input-manual-ip" class="ios-input" value="192.168.0.108">
+                </div>
+
+                <div class="ios-input-group" style="margin-bottom: 16px;">
+                  <label class="ios-input-label">Port</label>
+                  <input type="number" id="input-manual-port" class="ios-input" value="5555">
+                </div>
+
+                <button id="btn-manual-connect" class="ios-btn ios-btn-primary" style="width: 100%;">
+                  Connect to TV
+                </button>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- =================================================================
+               TAB 9: APPEARANCE & SETTINGS
+               ================================================================= -->
+          <section id="tab-settings" class="tab-content" style="display: none;">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              
+              <!-- Appearance Settings -->
+              <div class="ios-card">
+                <div class="ios-card-header">
+                  <span class="ios-card-title">Appearance</span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                  <label class="ios-input-label" style="display: block; margin-bottom: 8px;">Theme Appearance</label>
+                  <div class="ios-segmented-control">
+                    <div class="segmented-item" data-set-theme="light">Light</div>
+                    <div class="segmented-item" data-set-theme="dark">Dark</div>
+                    <div class="segmented-item active" data-set-theme="system">System (Auto)</div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="ios-input-label" style="display: block; margin-bottom: 8px;">Accent Color</label>
+                  <div class="ios-segmented-control">
+                    <div class="segmented-item active" data-set-accent="blue">Apple Blue</div>
+                    <div class="segmented-item" data-set-accent="purple">Purple</div>
+                    <div class="segmented-item" data-set-accent="green">Green</div>
+                    <div class="segmented-item" data-set-accent="orange">Orange</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- System Diagnostics -->
+              <div class="ios-card">
+                <div class="ios-card-header">
+                  <span class="ios-card-title">Diagnostics &amp; Environment</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+                  <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--separator-subtle);">
+                    <span style="color: var(--text-secondary);">Target Device</span>
+                    <span class="tabular-nums" style="font-weight: 600;">192.168.0.108:5555</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--separator-subtle);">
+                    <span style="color: var(--text-secondary);">Device Model</span>
+                    <span style="font-weight: 600;">MiTV-AXSO0 (Xiaomi)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--separator-subtle);">
+                    <span style="color: var(--text-secondary);">Display Resolution</span>
+                    <span class="tabular-nums" style="font-weight: 600;">1280x720 (720p)</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid var(--separator-subtle);">
+                    <span style="color: var(--text-secondary);">Architecture</span>
+                    <span class="tabular-nums" style="font-weight: 600;">armeabi-v7a</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-secondary);">ADB Binary</span>
+                    <span class="tabular-nums" style="font-weight: 600;">/opt/homebrew/bin/adb</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+      </main>
+
+      <!-- MOBILE BOTTOM TAB BAR (iOS 18 Thumb Bar) -->
+      <nav class="mobile-tab-bar">
+        <div class="mobile-tab-item active" data-tab="overview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Overview</span>
+        </div>
+        <div class="mobile-tab-item" data-tab="remote">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="4"></rect><circle cx="12" cy="8" r="2.5"></circle></svg>
+          <span>Remote</span>
+        </div>
+        <div class="mobile-tab-item" data-tab="cast">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>Mirror</span>
+        </div>
+        <div class="mobile-tab-item" data-tab="apps">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          <span>Apps</span>
+        </div>
+        <div class="mobile-tab-item" onclick="document.querySelector('.app-sidebar').classList.add('mobile-open')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <span>More</span>
+        </div>
+      </nav>
+
+    </div>
+
+  </div>
 
   <!-- =======================================================================
-       FOOTER
+       GLOBAL COMMAND PALETTE (Spotlight / Raycast Style ⌘K)
        ======================================================================= -->
-  <footer class="block-black" style="padding: 1.5rem 2rem; border-top: var(--bh-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <div class="brand-emblem">
-        <div class="emblem-circle" style="width: 18px; height: 18px;"></div>
-        <div class="emblem-square" style="width: 18px; height: 18px;"></div>
-        <div class="emblem-triangle" style="border-bottom-width: 18px; border-left-width: 9px; border-right-width: 9px;"></div>
+  <div id="palette-overlay" class="palette-overlay">
+    <div class="palette-card">
+      <div class="palette-search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-tertiary);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="palette-search-input" class="palette-input" placeholder="Type a command or search (e.g. Remote, YouTube, Sleep)...">
       </div>
-      <span style="font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em;">
-        TV-HUB // BAUHAUS DESIGN SYSTEM &bull; FORM FOLLOWS FUNCTION
-      </span>
+      <div id="palette-results-list" class="palette-list">
+        <!-- Filtered results -->
+      </div>
+      <div class="palette-footer">
+        <span>Use ↑ ↓ to navigate</span>
+        <span>Enter to select &bull; Esc to close</span>
+      </div>
     </div>
-    <div style="font-weight: 800; font-size: 0.85rem; color: var(--bh-yellow);">
-      MIT LICENSE &bull; NO TRACKING &bull; LOCAL ADB BRIDGE
+  </div>
+
+  <!-- =======================================================================
+       MODAL: ADD CUSTOM SHORTCUT
+       ======================================================================= -->
+  <div id="modal-add-shortcut" class="ios-modal-backdrop">
+    <div class="ios-modal-sheet">
+      <h3 class="headline-medium" style="margin-bottom: 6px;">Add Website Shortcut</h3>
+      <p class="text-subhead" style="margin-bottom: 18px;">Create a 1-click launcher tile to open any website on TV.</p>
+
+      <form id="form-add-shortcut">
+        <div class="ios-input-group" style="margin-bottom: 12px;">
+          <label class="ios-input-label">Shortcut Label</label>
+          <input type="text" id="input-shortcut-name" class="ios-input" placeholder="e.g. Plex or Jellyfin" required>
+        </div>
+
+        <div class="ios-input-group" style="margin-bottom: 20px;">
+          <label class="ios-input-label">Website URL</label>
+          <input type="url" id="input-shortcut-url" class="ios-input" placeholder="https://..." required>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="ios-btn ios-btn-secondary" onclick="App.closeModal('modal-add-shortcut')">Cancel</button>
+          <button type="submit" class="ios-btn ios-btn-primary">Add Bookmark</button>
+        </div>
+      </form>
     </div>
-  </footer>
+  </div>
+
+  <!-- =======================================================================
+       MODAL: CONFIRMATION DIALOG
+       ======================================================================= -->
+  <div id="modal-confirm-dialog" class="ios-modal-backdrop">
+    <div class="ios-modal-sheet" style="text-align: center;">
+      <h3 id="modal-confirm-title" class="headline-medium" style="margin-bottom: 8px;">Are you sure?</h3>
+      <p id="modal-confirm-message" class="text-subhead" style="margin-bottom: 20px;">This action cannot be undone.</p>
+      <div style="display: flex; justify-content: center; gap: 12px;">
+        <button class="ios-btn ios-btn-secondary" onclick="App.closeModal('modal-confirm-dialog')">Cancel</button>
+        <button id="btn-modal-confirm-action" class="ios-btn ios-btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL: KEYBOARD SHORTCUTS REFERENCE
+       ======================================================================= -->
+  <div id="modal-keyboard-shortcuts" class="ios-modal-backdrop">
+    <div class="ios-modal-sheet" style="width: 520px;">
+      <div class="ios-card-header">
+        <span class="ios-card-title">Keyboard Shortcuts</span>
+        <button class="topbar-btn topbar-btn-icon" onclick="App.closeModal('modal-keyboard-shortcuts')">✕</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">D-Pad Navigation</span>
+          <kbd class="meta-pill" style="font-weight: 700;">Arrow Keys (↑ ↓ ← →)</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">Select / OK</span>
+          <kbd class="meta-pill" style="font-weight: 700;">Enter</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">Back / Exit</span>
+          <kbd class="meta-pill" style="font-weight: 700;">Escape / Backspace</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">TV Home</span>
+          <kbd class="meta-pill" style="font-weight: 700;">Home Key</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">Volume Up / Down</span>
+          <kbd class="meta-pill" style="font-weight: 700;">+ / -</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">Mute Audio</span>
+          <kbd class="meta-pill" style="font-weight: 700;">M</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--separator-subtle);">
+          <span style="color: var(--text-secondary);">Play / Pause Media</span>
+          <kbd class="meta-pill" style="font-weight: 700;">Space</kbd>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 6px 0;">
+          <span style="color: var(--text-secondary);">Open Command Palette</span>
+          <kbd class="meta-pill" style="font-weight: 700;">⌘K / Ctrl+K</kbd>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/remote.js"></script>
   <script src="/js/cast.js"></script>

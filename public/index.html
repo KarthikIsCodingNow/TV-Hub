@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV-HUB // BAUHAUS CONTROLLER</title>
+  <link rel="stylesheet" href="/css/bauhaus.css">
+  <script src="/vendor/jmuxer.min.js"></script>
+</head>
+<body data-theme="classic">
+
+  <!-- =======================================================================
+       TOP CONSTRUCTIVIST HEADER & BRANDING
+       ======================================================================= -->
+  <header class="block-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      
+      <!-- Brand Composition -->
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <div class="brand-emblem">
+          <div class="emblem-circle"></div>
+          <div class="emblem-square"></div>
+          <div class="emblem-triangle"></div>
+        </div>
+        <div>
+          <h1 class="text-massive" style="line-height: 0.85; margin: 0;">TV-HUB</h1>
+          <div class="text-label" style="color: var(--bh-red); margin-top: 0.25rem;">
+            [ FORM FOLLOWS FUNCTION &bull; ANDROID TV CONTROLLER ]
+          </div>
+        </div>
+      </div>
+
+      <!-- TV Device Status Pill -->
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div id="device-status-badge" class="bh-pill block-white">
+          <span id="header-status-dot" class="status-dot status-offline"></span>
+          <span id="device-model-name">CONNECTING...</span>
+          <span style="color: #666;">|</span>
+          <span id="device-ip-display">192.168.0.108:5555</span>
+        </div>
+
+        <button class="bh-btn bh-btn-yellow bh-btn-pill" onclick="App.switchTab('discovery')" style="padding: 0.4rem 1rem; font-size: 0.85rem;">
+          TVS ON NETWORK
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       SOLID COLOR-BLOCKED NAVIGATION
+       ======================================================================= -->
+  <nav class="bh-nav">
+    <div class="bh-nav-item active" data-tab="remote">
+      <span class="shape-triangle" style="border-bottom-color: var(--bh-yellow); margin-bottom: 2px;"></span>
+      REMOTE CONTROL
+    </div>
+    <div class="bh-nav-item" data-tab="cast">
+      <div style="width: 14px; height: 14px; background: var(--bh-blue); border: 2px solid var(--bh-black);"></div>
+      CAST & TRACKPAD
+    </div>
+    <div class="bh-nav-item" data-tab="text">
+      <div style="width: 14px; height: 14px; background: var(--bh-red); border-radius: 9999px !important; border: 2px solid var(--bh-black);"></div>
+      TEXT & CLIPBOARD
+    </div>
+    <div class="bh-nav-item" data-tab="files">
+      <span class="shape-triangle" style="border-bottom-color: #FFFFFF;"></span>
+      FILE SENDER
+    </div>
+    <div class="bh-nav-item" data-tab="apps">
+      <div style="width: 14px; height: 14px; background: var(--bh-yellow); border: 2px solid var(--bh-black);"></div>
+      APPS & ADBLOCK TV BRO
+    </div>
+    <div class="bh-nav-item" data-tab="shortcuts">
+      <div style="width: 14px; height: 14px; background: var(--bh-blue); border-radius: 9999px !important; border: 2px solid var(--bh-black);"></div>
+      WEBSITE SHORTCUTS
+    </div>
+    <div class="bh-nav-item" data-tab="discovery">
+      <div style="width: 14px; height: 14px; background: #FFFFFF; border: 2px solid var(--bh-black);"></div>
+      NETWORK SCANNER
+    </div>
+    <div class="bh-nav-item" data-tab="themes">
+      <span style="font-size: 1.1rem; line-height: 1;">&#9680;</span>
+      THEMES
+    </div>
+  </nav>
+
+  <!-- =======================================================================
+       MAIN WORKSPACE CONTAINER
+       ======================================================================= -->
+  <main class="container" style="flex: 1;">
+
+    <!-- =====================================================================
+         TAB 1: TACTILE D-PAD REMOTE
+         ===================================================================== -->
+    <section id="tab-remote" class="tab-content">
+      <div class="grid-cols-2">
+
+        <!-- D-Pad Constructivist Matrix -->
+        <div class="bh-card">
+          <div class="bh-card-header">
+            <h2 class="text-title">D-PAD MATRIX</h2>
+            <span class="bh-pill">KEYBOARD ACTIVE</span>
+          </div>
+
+          <div class="remote-cluster">
+            
+            <!-- Quick Power & Home Row -->
+            <div class="action-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 0.5rem;">
+              <button class="bh-btn bh-btn-red" data-key="POWER" title="Power Toggle">
+                POWER
+              </button>
+              <button class="bh-btn bh-btn-black" data-key="MUTE" title="Mute Audio">
+                MUTE
+              </button>
+              <button class="bh-btn bh-btn-blue" data-key="HOME" title="TV Home">
+                HOME
+              </button>
+              <button class="bh-btn bh-btn-yellow" data-key="BACK" title="Back / Return">
+                BACK
+              </button>
+            </div>
+
+            <!-- 3x3 D-Pad Matrix -->
+            <div class="dpad-matrix">
+              <!-- Row 1 -->
+              <div style="background-color: var(--bh-black);"></div>
+              <button class="dpad-btn" data-key="DPAD_UP" title="Up Arrow">&#9650;</button>
+              <div style="background-color: var(--bh-black);"></div>
+
+              <!-- Row 2 -->
+              <button class="dpad-btn" data-key="DPAD_LEFT" title="Left Arrow">&#9664;</button>
+              <button class="dpad-btn dpad-btn-center" data-key="OK" title="Enter / Select">OK</button>
+              <button class="dpad-btn" data-key="DPAD_RIGHT" title="Right Arrow">&#9654;</button>
+
+              <!-- Row 3 -->
+              <div style="background-color: var(--bh-black);"></div>
+              <button class="dpad-btn" data-key="DPAD_DOWN" title="Down Arrow">&#9660;</button>
+              <div style="background-color: var(--bh-black);"></div>
+            </div>
+
+            <!-- Volume and Media Controls -->
+            <div class="action-grid" style="margin-top: 0.5rem;">
+              <button class="bh-btn bh-btn-black" data-key="VOLUME_UP">VOL +</button>
+              <button class="bh-btn bh-btn-black" data-key="VOLUME_DOWN">VOL -</button>
+              <button class="bh-btn bh-btn-yellow" data-key="MENU">MENU</button>
+              <button class="bh-btn bh-btn-blue" data-key="PLAY_PAUSE">PLAY/PAUSE</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Keyboard Guide & Quick Actions Card -->
+        <div>
+          <div class="bh-card block-black" style="color: #FFFFFF; margin-bottom: 1.5rem;">
+            <h2 class="text-title" style="margin-bottom: 1rem; color: var(--bh-yellow);">LAPTOP KEYBOARD CONTROL</h2>
+            <p style="font-weight: 600; margin-bottom: 1.25rem;">
+              You can control your TV directly using your laptop keyboard anywhere in this interface:
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-weight: 800; font-size: 0.9rem;">
+              <div>&bull; &uarr; &darr; &larr; &rarr; : D-Pad Navigation</div>
+              <div>&bull; ENTER : Select / OK</div>
+              <div>&bull; ESC / BACKSPACE : Back</div>
+              <div>&bull; HOME KEY : TV Home</div>
+              <div>&bull; + / - : Volume Up / Down</div>
+              <div>&bull; M KEY : Mute Audio</div>
+              <div>&bull; SPACE : Play / Pause</div>
+              <div>&bull; TRACKPAD WHEEL : Scroll / DPAD</div>
+            </div>
+          </div>
+
+          <div class="bh-card">
+            <div class="bh-card-header">
+              <h3 style="font-size: 1.3rem;">QUICK TV COMMANDS</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <button class="bh-btn bh-btn-yellow" onclick="Remote.sendKey('WAKEUP', 224)">WAKE TV UP</button>
+              <button class="bh-btn bh-btn-black" onclick="Remote.sendKey('SLEEP', 223)">PUT TV TO SLEEP</button>
+              <button class="bh-btn bh-btn-blue" onclick="App.switchTab('cast')">OPEN SCREEN CAST</button>
+              <button class="bh-btn bh-btn-red" onclick="App.switchTab('apps')">OPEN ADBLOCK BROWSER</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 2: SCREEN CAST & TRACKPAD/MOUSE CONTROL
+         ===================================================================== -->
+    <section id="tab-cast" class="tab-content" style="display: none;">
+      <div class="bh-card">
+        <div class="bh-card-header">
+          <div>
+            <h2 class="text-title">TV SCREEN CAST &amp; TRACKPAD</h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
+              <span id="cast-status-dot" class="status-dot status-offline"></span>
+              <span id="cast-status-text" style="font-weight: 800; font-size: 0.85rem;">INITIALIZING CAST...</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button id="btn-toggle-cast" class="bh-btn bh-btn-red" onclick="Cast.toggleStream()">
+              STOP CASTING
+            </button>
+            <button class="bh-btn bh-btn-yellow" onclick="Cast.captureSingleSnapshot()">
+              REFRESH FRAME
+            </button>
+            <button class="bh-btn bh-btn-black" onclick="Cast.toggleFullscreen()">
+              FULLSCREEN
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Screen Viewport -->
+        <div id="cast-viewport" class="cast-viewport-card">
+          <!-- Live H.264 Video Stream -->
+          <video id="cast-video" autoplay muted playsinline></video>
+          <!-- Fallback Canvas -->
+          <canvas id="cast-canvas" style="display: none;"></canvas>
+          <!-- Crosshair Touch/Tap Indicator -->
+          <div id="cast-indicator" class="cast-touch-indicator"></div>
+        </div>
+
+        <!-- Cast Instructions Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="font-weight: 800; font-size: 0.85rem; text-transform: uppercase;">
+            <span style="color: var(--bh-red);">&#9679; MOUSE CLICK:</span> Tap on TV &bull;
+            <span style="color: var(--bh-blue);">&#9679; CLICK &amp; DRAG:</span> Swipe Screen &bull;
+            <span style="color: var(--bh-yellow);">&#9679; KEYBOARD:</span> Full Remote Control
+          </div>
+          <div class="bh-pill">
+            TV RESOLUTION: <span id="cast-res-label">1280x720</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 3: TEXT & CLIPBOARD SENDER
+         ===================================================================== -->
+    <section id="tab-text" class="tab-content" style="display: none;">
+      <div class="grid-cols-2">
+
+        <div class="bh-card">
+          <div class="bh-card-header">
+            <h2 class="text-title">SEND TEXT TO TV</h2>
+            <span class="bh-pill">AUTO-TYPE</span>
+          </div>
+          <p style="font-weight: 700; margin-bottom: 1.25rem;">
+            Type anything on your laptop and send it directly into search boxes, password fields, or forms on your TV.
+          </p>
+
+          <div style="margin-bottom: 1.25rem;">
+            <input type="text" id="text-input-field" class="bh-input" placeholder="Type text or search query here..." autofocus>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <button id="btn-send-text" class="bh-btn bh-btn-yellow" style="flex: 2;">
+              SEND TO TV (ENTER)
+            </button>
+            <button class="bh-btn bh-btn-black" onclick="document.getElementById('text-input-field').value = ''" style="flex: 1;">
+              CLEAR
+            </button>
+          </div>
+        </div>
+
+        <div class="bh-card block-blue">
+          <div class="bh-card-header" style="border-bottom-color: #FFFFFF;">
+            <h2 class="text-title" style="color: #FFFFFF;">LAPTOP CLIPBOARD</h2>
+            <span class="bh-pill block-white">1-CLICK PASTE</span>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 1.5rem; color: #FFFFFF;">
+            Instantly sync your laptop clipboard. Useful for long URLs, Wi-Fi keys, complex credentials, and YouTube video links.
+          </p>
+
+          <button id="btn-paste-clipboard" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%;">
+            PASTE LAPTOP CLIPBOARD TO TV
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 4: FILE SENDER
+         ===================================================================== -->
+    <section id="tab-files" class="tab-content" style="display: none;">
+      <div class="bh-card">
+        <div class="bh-card-header">
+          <h2 class="text-title">FILE SENDER TO TV</h2>
+          <span class="bh-pill">TARGET: /sdcard/Download/</span>
+        </div>
+
+        <div id="file-dropzone" class="bh-dropzone">
+          <div class="brand-emblem" style="margin-bottom: 1rem;">
+            <div class="emblem-circle"></div>
+            <div class="emblem-square"></div>
+            <div class="emblem-triangle"></div>
+          </div>
+          <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">DRAG &amp; DROP FILES HERE</h3>
+          <p style="font-weight: 700; color: #666; margin-bottom: 1.25rem;">
+            Send videos, pictures, APKs, music, and documents directly to your TV storage.
+          </p>
+          <button class="bh-btn bh-btn-yellow" onclick="document.getElementById('file-input').click()">
+            BROWSE FILES ON LAPTOP
+          </button>
+          <input type="file" id="file-input" style="display: none;">
+        </div>
+
+        <div id="upload-progress-card" class="bh-card block-yellow" style="display: none; margin-top: 1.5rem; margin-bottom: 0;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="status-dot status-online"></div>
+            <span id="upload-progress-text" style="font-weight: 900; font-size: 1.1rem;">UPLOADING...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 5: APPS & TOP-RATED ADBLOCK TV BROWSER
+         ===================================================================== -->
+    <section id="tab-apps" class="tab-content" style="display: none;">
+      
+      <!-- HERO: TV BRO TOP-RATED ADBLOCK BROWSER -->
+      <div class="bh-card block-red" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div class="bh-pill block-white" style="margin-bottom: 0.75rem;">
+              RECOMMENDED #1 TV APP
+            </div>
+            <h2 class="text-title" style="color: #FFFFFF; font-size: 2.5rem; margin-bottom: 0.5rem;">
+              TOP-RATED ADBLOCK TV BROWSER: TV BRO
+            </h2>
+            <p style="font-weight: 600; max-width: 750px; color: #FFF;">
+              TV Bro is the highest-rated open-source web browser built specifically for Android TV remotes.
+              Features a built-in adblocker, smooth cursor navigation, hardware video player, and zero tracking.
+            </p>
+          </div>
+
+          <div>
+            <button id="btn-install-tvbro" class="bh-btn bh-btn-lg bh-btn-yellow" style="margin-top: 0.5rem;">
+              &#9889; 1-CLICK INSTALL TV BRO
+            </button>
+          </div>
+        </div>
+
+        <div id="tvbro-install-status" style="margin-top: 1rem; font-weight: 900; display: none; background: #000; padding: 0.75rem 1rem;">
+          DOWNLOADING &amp; SIDELOADING...
+        </div>
+      </div>
+
+      <!-- Sideload Custom APK -->
+      <div class="bh-card" style="margin-bottom: 2rem;">
+        <div class="bh-card-header">
+          <h3 class="text-title" style="font-size: 1.8rem;">SIDELOAD ANY APK TO TV</h3>
+          <span class="bh-pill">ADB INSTALL -R</span>
+        </div>
+        <div id="apk-dropzone" class="bh-dropzone" style="padding: 2rem;">
+          <h4 style="font-size: 1.4rem; margin-bottom: 0.5rem;">DRAG &amp; DROP .APK FILE HERE</h4>
+          <p style="font-weight: 700; color: #666; margin-bottom: 1rem;">Directly installs any app onto your Android TV.</p>
+          <button class="bh-btn bh-btn-blue">SELECT APK FROM LAPTOP</button>
+          <input type="file" id="apk-input" accept=".apk" style="display: none;">
+        </div>
+      </div>
+
+      <!-- Installed Apps List & Deletion -->
+      <div class="bh-card">
+        <div class="bh-card-header">
+          <h3 class="text-title" style="font-size: 1.8rem;">INSTALLED APPS (MANAGE &amp; DELETE)</h3>
+          <button id="btn-refresh-apps" class="bh-btn bh-btn-yellow" style="padding: 0.4rem 1rem;">REFRESH LIST</button>
+        </div>
+        <div id="installed-apps-grid">
+          <div style="padding: 1.5rem; font-weight: 800;">CLICK REFRESH TO VIEW INSTALLED APPS...</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         TAB 6: WEBSITE SHORTCUTS
+         ===================================================================== -->
+    <section id="tab-shortcuts" class="tab-content" style="display: none;">
+      
+      <!-- Preset Popular Shortcuts -->
+      <div class="bh-card" style="margin-bottom: 2rem;">
+        <div class="bh-card-header">
+          <h2 class="text-title">POPULAR TV WEBSITES</h2>
+          <span class="bh-pill">1-CLICK LAUNCH</span>
+        </div>
+        <div class="grid-cols-3">
+          <div class="bh-card block-red" style="padding: 1.25rem;">
+            <h3 style="font-size: 1.6rem; color: #FFF; margin-bottom: 0.5rem;">YOUTUBE</h3>
+            <p style="font-weight: 600; color: #FFF; margin-bottom: 1rem; font-size: 0.85rem;">Ad-free web portal in TV Bro</p>
+            <button class="bh-btn bh-btn-yellow" onclick="App.launchUrl('https://youtube.com')" style="width: 100%;">OPEN ON TV</button>
+          </div>
+
+          <div class="bh-card block-blue" style="padding: 1.25rem;">
+            <h3 style="font-size: 1.6rem; color: #FFF; margin-bottom: 0.5rem;">TWITCH TV</h3>
+            <p style="font-weight: 600; color: #FFF; margin-bottom: 1rem; font-size: 0.85rem;">Live streaming channels</p>
+            <button class="bh-btn bh-btn-yellow" onclick="App.launchUrl('https://twitch.tv')" style="width: 100%;">OPEN ON TV</button>
+          </div>
+
+          <div class="bh-card block-yellow" style="padding: 1.25rem;">
+            <h3 style="font-size: 1.6rem; margin-bottom: 0.5rem;">REDDIT</h3>
+            <p style="font-weight: 600; margin-bottom: 1rem; font-size: 0.85rem;">Browse media &amp; communities</p>
+            <button class="bh-btn bh-btn-black" onclick="App.launchUrl('https://reddit.com')" style="width: 100%;">OPEN ON TV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Custom Website Shortcut -->
+      <div class="bh-card">
+        <div class="bh-card-header">
+          <h2 class="text-title">ADD CUSTOM WEBSITE SHORTCUT</h2>
+        </div>
+        <form id="form-add-shortcut" style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 1rem; margin-bottom: 1.5rem;">
+          <input type="text" id="input-shortcut-name" class="bh-input" placeholder="Shortcut Name (e.g. Plex)" required>
+          <input type="url" id="input-shortcut-url" class="bh-input" placeholder="https://..." required>
+          <button type="submit" class="bh-btn bh-btn-yellow">ADD SHORTCUT</button>
+        </form>
+
+        <div id="custom-shortcuts-grid" class="grid-cols-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         TAB 7: NETWORK TV DISCOVERY
+         ===================================================================== -->
+    <section id="tab-discovery" class="tab-content" style="display: none;">
+      <div class="grid-cols-2">
+
+        <!-- Auto-Detection -->
+        <div class="bh-card">
+          <div class="bh-card-header">
+            <h2 class="text-title">AUTO-DETECT TVS ON NETWORK</h2>
+            <span class="bh-pill">SUBNET SCANNER</span>
+          </div>
+          <p style="font-weight: 700; margin-bottom: 1.25rem;">
+            Scans your local Wi-Fi / Ethernet network on port 5555 and ADB mDNS to automatically detect all Android TVs.
+          </p>
+          <button id="btn-auto-discover" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%; margin-bottom: 1.5rem;">
+            &#128269; SCAN NETWORK FOR TVS
+          </button>
+          <div id="discovery-status-text" style="font-weight: 900; margin-bottom: 1rem; text-transform: uppercase;">
+            READY TO SCAN
+          </div>
+          <div id="discovered-tvs-list">
+            <!-- Discovered TVs populated here -->
+          </div>
+        </div>
+
+        <!-- Manual IP Connection -->
+        <div class="bh-card block-black" style="color: #FFFFFF;">
+          <div class="bh-card-header" style="border-bottom-color: #FFFFFF;">
+            <h2 class="text-title" style="color: var(--bh-yellow);">MANUAL TV CONNECTION</h2>
+            <span class="bh-pill block-white">DIRECT IP</span>
+          </div>
+          <p style="font-weight: 600; margin-bottom: 1.25rem;">
+            Connect directly to your TV's IP address (pre-configured for your TV at 192.168.0.108).
+          </p>
+
+          <div style="margin-bottom: 1rem;">
+            <label class="text-label" style="display: block; margin-bottom: 0.5rem; color: #FFF;">TV IP ADDRESS</label>
+            <input type="text" id="input-manual-ip" class="bh-input" value="192.168.0.108">
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label class="text-label" style="display: block; margin-bottom: 0.5rem; color: #FFF;">PORT</label>
+            <input type="number" id="input-manual-port" class="bh-input" value="5555">
+          </div>
+
+          <button id="btn-manual-connect" class="bh-btn bh-btn-lg bh-btn-yellow" style="width: 100%;">
+            CONNECT TO TV
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 8: BAUHAUS THEMES
+         ===================================================================== -->
+    <section id="tab-themes" class="tab-content" style="display: none;">
+      <div class="bh-card">
+        <div class="bh-card-header">
+          <h2 class="text-title">BAUHAUS THEME PALETTES</h2>
+          <span class="bh-pill">FORM FOLLOWS FUNCTION</span>
+        </div>
+        <p style="font-weight: 700; margin-bottom: 1.5rem;">
+          Select a Constructivist or Modernist theme composition for TV-Hub:
+        </p>
+
+        <div class="grid-cols-2">
+          
+          <div class="bh-card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">CLASSIC BAUHAUS (ORIGINAL)</h3>
+            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Stark Black, Off-White, Primary Red, Blue, and Yellow.</p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+              <div style="width: 32px; height: 32px; background: #D02020; border: 3px solid #121212;"></div>
+              <div style="width: 32px; height: 32px; background: #1040C0; border: 3px solid #121212;"></div>
+              <div style="width: 32px; height: 32px; background: #F0C020; border: 3px solid #121212;"></div>
+              <div style="width: 32px; height: 32px; background: #121212; border: 3px solid #121212;"></div>
+            </div>
+            <button class="bh-btn bh-btn-yellow" data-set-theme="classic" style="width: 100%;">APPLY CLASSIC</button>
+          </div>
+
+          <div class="bh-card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">DE STIJL / MONDRIAN</h3>
+            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Deep Vermilion, Cobalt, Canary Yellow, Cream Base.</p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+              <div style="width: 32px; height: 32px; background: #BD1E1E; border: 3px solid #0A0A0A;"></div>
+              <div style="width: 32px; height: 32px; background: #0E2F9E; border: 3px solid #0A0A0A;"></div>
+              <div style="width: 32px; height: 32px; background: #FAD02C; border: 3px solid #0A0A0A;"></div>
+              <div style="width: 32px; height: 32px; background: #0A0A0A; border: 3px solid #0A0A0A;"></div>
+            </div>
+            <button class="bh-btn bh-btn-blue" data-set-theme="mondrian" style="width: 100%;">APPLY MONDRIAN</button>
+          </div>
+
+          <div class="bh-card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">CONSTRUCTIVIST</h3>
+            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Soviet Constructivism: Ochre, Industrial Red, Warm White.</p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+              <div style="width: 32px; height: 32px; background: #D32F2F; border: 3px solid #1A1A1A;"></div>
+              <div style="width: 32px; height: 32px; background: #1976D2; border: 3px solid #1A1A1A;"></div>
+              <div style="width: 32px; height: 32px; background: #FFA000; border: 3px solid #1A1A1A;"></div>
+              <div style="width: 32px; height: 32px; background: #1A1A1A; border: 3px solid #1A1A1A;"></div>
+            </div>
+            <button class="bh-btn bh-btn-red" data-set-theme="constructivist" style="width: 100%;">APPLY CONSTRUCTIVIST</button>
+          </div>
+
+          <div class="bh-card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">MONOLITH MONOCHROME</h3>
+            <p style="font-weight: 600; color: #555; margin-bottom: 1rem;">Pure high-contrast Stark Black and Bright White geometry.</p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+              <div style="width: 32px; height: 32px; background: #000000; border: 3px solid #000000;"></div>
+              <div style="width: 32px; height: 32px; background: #333333; border: 3px solid #000000;"></div>
+              <div style="width: 32px; height: 32px; background: #888888; border: 3px solid #000000;"></div>
+              <div style="width: 32px; height: 32px; background: #FFFFFF; border: 3px solid #000000;"></div>
+            </div>
+            <button class="bh-btn bh-btn-black" data-set-theme="monolith" style="width: 100%;">APPLY MONOLITH</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =======================================================================
+       FOOTER
+       ======================================================================= -->
+  <footer class="block-black" style="padding: 1.5rem 2rem; border-top: var(--bh-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="brand-emblem">
+        <div class="emblem-circle" style="width: 18px; height: 18px;"></div>
+        <div class="emblem-square" style="width: 18px; height: 18px;"></div>
+        <div class="emblem-triangle" style="border-bottom-width: 18px; border-left-width: 9px; border-right-width: 9px;"></div>
+      </div>
+      <span style="font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em;">
+        TV-HUB // BAUHAUS DESIGN SYSTEM &bull; FORM FOLLOWS FUNCTION
+      </span>
+    </div>
+    <div style="font-weight: 800; font-size: 0.85rem; color: var(--bh-yellow);">
+      MIT LICENSE &bull; NO TRACKING &bull; LOCAL ADB BRIDGE
+    </div>
+  </footer>
+
+  <script src="/js/remote.js"></script>
+  <script src="/js/cast.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

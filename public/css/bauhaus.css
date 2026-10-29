@@ -1,0 +1,587 @@
+/* ==========================================================================
+   TV-HUB // BAUHAUS DESIGN SYSTEM
+   Constructivist, Geometric, "Form Follows Function"
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap');
+
+:root {
+  /* Bauhaus Primaries */
+  --bh-red: #D02020;
+  --bh-blue: #1040C0;
+  --bh-yellow: #F0C020;
+
+  /* Base */
+  --bh-black: #121212;
+  --bh-white: #F0F0F0;
+  --bh-card-bg: #FFFFFF;
+
+  /* Geometry & Borders: Binary Radius ONLY (0px or 9999px) */
+  --bh-radius-square: 0px;
+  --bh-radius-pill: 9999px;
+
+  /* Borders: Thick Black (2px mobile / 4px desktop) */
+  --bh-border-width: 4px;
+  --bh-border: var(--bh-border-width) solid var(--bh-black);
+  --bh-border-thin: 2px solid var(--bh-black);
+
+  /* Depth: Hard black offset shadows ONLY - No blur */
+  --bh-shadow-xs: 2px 2px 0px 0px var(--bh-black);
+  --bh-shadow-sm: 4px 4px 0px 0px var(--bh-black);
+  --bh-shadow-md: 6px 6px 0px 0px var(--bh-black);
+  --bh-shadow-lg: 8px 8px 0px 0px var(--bh-black);
+  --bh-shadow-xl: 12px 12px 0px 0px var(--bh-black);
+
+  /* Typography */
+  --bh-font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Theme variations */
+body[data-theme="mondrian"] {
+  --bh-red: #BD1E1E;
+  --bh-blue: #0E2F9E;
+  --bh-yellow: #FAD02C;
+  --bh-black: #0A0A0A;
+  --bh-white: #EAE6DF;
+}
+
+body[data-theme="monolith"] {
+  --bh-red: #121212;
+  --bh-blue: #333333;
+  --bh-yellow: #888888;
+  --bh-black: #000000;
+  --bh-white: #F5F5F5;
+}
+
+body[data-theme="constructivist"] {
+  --bh-red: #D32F2F;
+  --bh-blue: #1976D2;
+  --bh-yellow: #FFA000;
+  --bh-black: #1A1A1A;
+  --bh-white: #EFEBE9;
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Strict 0px unless explicitly pill/circle */
+}
+
+body {
+  font-family: var(--bh-font);
+  background-color: var(--bh-white);
+  color: var(--bh-black);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography Rules */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--bh-font);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em; /* tight tracking (tracking-tighter) */
+  line-height: 0.95;
+}
+
+.text-massive {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+}
+
+.text-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.text-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ==========================================================================
+   SOLID COLOR BLOCKING SECTIONS
+   ========================================================================== */
+.block-header {
+  background-color: var(--bh-white);
+  border-bottom: var(--bh-border);
+  padding: 1.5rem 2rem;
+  position: relative;
+}
+
+.block-red {
+  background-color: var(--bh-red);
+  color: #FFFFFF;
+}
+
+.block-blue {
+  background-color: var(--bh-blue);
+  color: #FFFFFF;
+}
+
+.block-yellow {
+  background-color: var(--bh-yellow);
+  color: var(--bh-black);
+}
+
+.block-black {
+  background-color: var(--bh-black);
+  color: #FFFFFF;
+}
+
+.block-white {
+  background-color: var(--bh-white);
+  color: var(--bh-black);
+}
+
+/* ==========================================================================
+   GEOMETRIC BRANDING & SHAPES
+   ========================================================================== */
+.shape-circle {
+  border-radius: 9999px !important;
+}
+
+.shape-square {
+  border-radius: 0px !important;
+}
+
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 20px solid var(--bh-yellow);
+  display: inline-block;
+}
+
+.brand-emblem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emblem-circle {
+  width: 24px;
+  height: 24px;
+  background-color: var(--bh-red);
+  border: 3px solid var(--bh-black);
+  border-radius: 9999px !important;
+}
+
+.emblem-square {
+  width: 24px;
+  height: 24px;
+  background-color: var(--bh-blue);
+  border: 3px solid var(--bh-black);
+}
+
+.emblem-triangle {
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 24px solid var(--bh-yellow);
+  filter: drop-shadow(0 0 0 var(--bh-black));
+}
+
+/* ==========================================================================
+   BAUHAUS COMPONENT SPECS: CARDS
+   Thick border, hard shadow, geometric corner accents
+   ========================================================================== */
+.bh-card {
+  background-color: var(--bh-card-bg);
+  border: var(--bh-border);
+  box-shadow: var(--bh-shadow-md);
+  position: relative;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Card Geometric Corner Accents */
+.bh-card::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--bh-red);
+  border: 2px solid var(--bh-black);
+  z-index: 2;
+}
+
+.bh-card::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--bh-blue);
+  border: 2px solid var(--bh-black);
+  border-radius: 9999px !important;
+  z-index: 2;
+}
+
+.bh-card-header {
+  border-bottom: var(--bh-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ==========================================================================
+   BAUHAUS COMPONENT SPECS: BUTTONS
+   Thick black borders + hard shadow.
+   Active: Physical press effect (translate + shadow removal)
+   ========================================================================== */
+.bh-btn {
+  font-family: var(--bh-font);
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  padding: 0.75rem 1.4rem;
+  border: var(--bh-border);
+  box-shadow: var(--bh-shadow-sm);
+  background-color: var(--bh-white);
+  color: var(--bh-black);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  user-select: none;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+  position: relative;
+}
+
+.bh-btn:hover {
+  background-color: #E2E2E2;
+}
+
+/* Physical Press Effect */
+.bh-btn:active, .bh-btn.pressed {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0px 0px 0px 0px var(--bh-black) !important;
+}
+
+.bh-btn-lg {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  box-shadow: var(--bh-shadow-md);
+}
+
+.bh-btn-lg:active, .bh-btn-lg.pressed {
+  transform: translate(6px, 6px) !important;
+  box-shadow: 0px 0px 0px 0px var(--bh-black) !important;
+}
+
+.bh-btn-red {
+  background-color: var(--bh-red);
+  color: #FFFFFF;
+}
+.bh-btn-red:hover {
+  background-color: #E62A2A;
+}
+
+.bh-btn-blue {
+  background-color: var(--bh-blue);
+  color: #FFFFFF;
+}
+.bh-btn-blue:hover {
+  background-color: #1A54E8;
+}
+
+.bh-btn-yellow {
+  background-color: var(--bh-yellow);
+  color: var(--bh-black);
+}
+.bh-btn-yellow:hover {
+  background-color: #FFD438;
+}
+
+.bh-btn-black {
+  background-color: var(--bh-black);
+  color: #FFFFFF;
+}
+.bh-btn-black:hover {
+  background-color: #262626;
+}
+
+.bh-btn-pill {
+  border-radius: 9999px !important;
+}
+
+/* ==========================================================================
+   NAVIGATION & TABS
+   ========================================================================== */
+.bh-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: var(--bh-border);
+  background-color: var(--bh-black);
+}
+
+.bh-nav-item {
+  padding: 1rem 1.5rem;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  background-color: var(--bh-white);
+  color: var(--bh-black);
+  border-right: var(--bh-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.1s ease;
+  position: relative;
+}
+
+.bh-nav-item:hover {
+  background-color: var(--bh-yellow);
+}
+
+.bh-nav-item.active {
+  background-color: var(--bh-red);
+  color: #FFFFFF;
+}
+
+.bh-nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-color: var(--bh-yellow);
+}
+
+/* ==========================================================================
+   INPUTS & FORMS
+   ========================================================================== */
+.bh-input {
+  width: 100%;
+  font-family: var(--bh-font);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+  border: var(--bh-border);
+  background-color: #FFFFFF;
+  color: var(--bh-black);
+  box-shadow: var(--bh-shadow-sm);
+  outline: none;
+}
+
+.bh-input:focus {
+  background-color: #FFFDF0;
+  border-color: var(--bh-blue);
+}
+
+/* ==========================================================================
+   REMOTE D-PAD CONSTRUCTIVIST COMPOSITION
+   ========================================================================== */
+.remote-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.dpad-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 72px);
+  grid-template-rows: repeat(3, 72px);
+  gap: 8px;
+  background-color: var(--bh-black);
+  padding: 8px;
+  border: var(--bh-border);
+  box-shadow: var(--bh-shadow-md);
+}
+
+.dpad-btn {
+  background-color: var(--bh-white);
+  color: var(--bh-black);
+  border: 3px solid var(--bh-black);
+  font-size: 1.4rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 2px 2px 0px 0px var(--bh-black);
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+
+.dpad-btn:active, .dpad-btn.pressed {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--bh-black);
+}
+
+.dpad-btn-center {
+  background-color: var(--bh-yellow);
+  font-size: 1.1rem;
+  border-radius: 9999px !important;
+}
+
+/* Remote action grids */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 450px;
+}
+
+/* ==========================================================================
+   SCREEN CASTING VIEWPORT
+   ========================================================================== */
+.cast-viewport-card {
+  background-color: #000000;
+  border: var(--bh-border);
+  box-shadow: var(--bh-shadow-lg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 16 / 9;
+  cursor: crosshair;
+}
+
+#cast-video, #cast-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.cast-touch-indicator {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--bh-red);
+  background-color: rgba(208, 32, 32, 0.4);
+  border-radius: 9999px !important;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s linear;
+  display: none;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   BADGES & PILLS
+   ========================================================================== */
+.bh-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border: var(--bh-border-thin);
+  border-radius: 9999px !important;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: var(--bh-shadow-xs);
+  background-color: #FFFFFF;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px !important;
+  border: 2px solid var(--bh-black);
+}
+
+.status-online {
+  background-color: #2ECC71;
+}
+
+.status-offline {
+  background-color: var(--bh-red);
+}
+
+/* ==========================================================================
+   IMAGE FILTER RULES: Grayscale by default, full color on hover
+   ========================================================================== */
+.bh-image {
+  filter: grayscale(100%);
+  transition: filter 0.2s ease, transform 0.2s ease;
+  border: var(--bh-border);
+}
+
+.bh-image:hover {
+  filter: grayscale(0%);
+}
+
+/* ==========================================================================
+   DROP ZONE
+   ========================================================================== */
+.bh-dropzone {
+  border: 4px dashed var(--bh-black);
+  background-color: #FFFFFF;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  box-shadow: var(--bh-shadow-sm);
+}
+
+.bh-dropzone.dragover {
+  background-color: #FFF9D6;
+  transform: scale(1.01);
+}
+
+/* ==========================================================================
+   LAYOUT GRID
+   ========================================================================== */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --bh-border-width: 2px;
+  }
+  .grid-cols-2, .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 1rem;
+  }
+  .bh-nav {
+    flex-direction: column;
+  }
+  .bh-nav-item {
+    border-right: none;
+    border-bottom: var(--bh-border);
+  }
+}
